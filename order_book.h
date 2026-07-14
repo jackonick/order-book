@@ -28,11 +28,15 @@ struct Trade {
 class OrderBook {
 public:
 	void add_order(Order incoming);
+	void cancel_id(uint64_t resting);
 	void print() const;
 	void printTrade() const;
 
 	std::size_t bid_levels() const;
+	std::size_t ask_levels() const;
 	std::size_t trade_count() const;
+	uint64_t id_getter() const;
+
 
 private:
 	std::map<uint64_t, std::deque<Order>, std::greater<uint64_t>> bids;

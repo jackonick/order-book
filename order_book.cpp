@@ -74,6 +74,49 @@ void OrderBook::add_order(Order incoming)
 	}
 }
 
+void OrderBook::cancel_id(uint64_t id){
+	uint64_t savedPrice = 0;
+	bool found = false;
+	for (auto& [price, orders] : bids){
+		if (found){
+			break;
+		}
+		for (auto it = orders.begin(); it != orders.end(); ++it){
+			if (it->id == id){
+				orders.erase(it);
+				savedPrice = price;
+				found = true;
+				break;
+			}
+		}
+	}
+	if (found && bids[savedPrice].empty()){
+		bids.erase(savedPrice);
+	}
+
+	if (found){
+		return;
+	}
+
+
+	for (auto& [price, orders] : asks){
+		if (found){
+			break;
+		}
+		for (auto it = orders.begin(); it != orders.end(); ++it){
+			if (it->id == id){
+				orders.erase(it);
+				savedPrice = price;
+				found = true;
+				break;
+			}
+		}
+	}
+	if (found && asks[savedPrice].empty()){
+		asks.erase(savedPrice);
+	}
+}
+
 void OrderBook::print() const
 {
 	std::cout << "---ASKS---\n";
@@ -123,6 +166,14 @@ std::size_t OrderBook::bid_levels () const{
 	return bids.size();
 }
 
+std::size_t OrderBook::ask_levels () const{
+	return asks.size();
+}
+
 std::size_t OrderBook::trade_count () const {
 	return Trades.size();
+}
+
+uint64_t OrderBook::id_getter () const {
+	return Trades.back().resting_id;
 }
