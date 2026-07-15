@@ -29,6 +29,7 @@ class OrderBook {
 public:
 	void add_order(Order incoming);
 	void cancel_id(uint64_t resting);
+	void modify_order(uint64_t id, uint64_t size);
 	void print() const;
 	void printTrade() const;
 
@@ -36,6 +37,7 @@ public:
 	std::size_t ask_levels() const;
 	std::size_t trade_count() const;
 	uint64_t id_getter() const;
+	uint64_t size_getter(uint64_t id) const;
 
 
 private:

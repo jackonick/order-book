@@ -113,3 +113,23 @@ TEST(Canceling, AsksAlsoCancel){
 
     EXPECT_EQ(book.ask_levels(), 0);
 }
+
+TEST(Modifying, BasicModify){
+    OrderBook book;
+    
+    Order o1;
+    o1.id = 1;
+    o1.side = Side::BUY;
+	o1.price = 100;
+	o1.size = 10;
+	o1.timestamp = 4;
+    book.add_order(o1);
+    EXPECT_EQ(book.size_getter(1), 10);
+
+    book.modify_order(1, 9);
+    EXPECT_EQ(book.size_getter(1), 9);
+
+    book.modify_order(1, 0);
+    EXPECT_EQ(book.bid_levels(), 0);
+
+}

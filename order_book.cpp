@@ -117,6 +117,31 @@ void OrderBook::cancel_id(uint64_t id){
 	}
 }
 
+void OrderBook::modify_order(uint64_t id, uint64_t new_size){
+	if (new_size == 0){
+		cancel_id(id);
+		return;
+	}
+
+	for (auto& [price, orders] : asks){
+		for (auto it = orders.begin(); it != orders.end(); ++it){
+			if (it->id == id){
+				it->size = new_size;
+			}
+		}
+	}
+
+	for (auto& [price, orders] : bids){
+		for (auto it = orders.begin(); it != orders.end(); ++it){
+			if (it->id == id){
+				it->size = new_size;
+			}
+		}
+	}
+}
+
+
+
 void OrderBook::print() const
 {
 	std::cout << "---ASKS---\n";
@@ -176,4 +201,24 @@ std::size_t OrderBook::trade_count () const {
 
 uint64_t OrderBook::id_getter () const {
 	return Trades.back().resting_id;
+}
+
+uint64_t OrderBook::size_getter (uint64_t id) const {
+	for (const auto& [price, orders] : asks){
+		for (auto it = orders.begin(); it != orders.end(); ++it){
+			if (it->id == id){
+				return it->size;
+			}
+		}
+	}
+
+	for (const auto& [price, orders] : bids){
+		for (auto it = orders.begin(); it != orders.end(); ++it){
+			if (it->id == id){
+				return it->size;
+			}
+		}
+	}
+
+	return 0;
 }
