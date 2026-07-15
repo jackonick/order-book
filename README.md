@@ -1,4 +1,4 @@
-# Order Book V1
+# Order Book
 
 A limit order book matching engine written from scratch in C++20, using only the standard library.
 
