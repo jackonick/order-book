@@ -30,6 +30,7 @@ public:
 	void add_order(Order incoming);
 	void cancel_id(uint64_t resting);
 	void modify_order(uint64_t id, uint64_t size);
+	void modify_price(uint64_t id, uint64_t price);
 	void print() const;
 	void printTrade() const;
 
@@ -38,6 +39,7 @@ public:
 	std::size_t trade_count() const;
 	uint64_t id_getter() const;
 	uint64_t size_getter(uint64_t id) const;
+	uint64_t price_getter(uint64_t id) const;
 
 
 private:

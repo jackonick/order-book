@@ -98,7 +98,6 @@ void OrderBook::cancel_id(uint64_t id){
 		return;
 	}
 
-
 	for (auto& [price, orders] : asks){
 		if (found){
 			break;
@@ -117,7 +116,7 @@ void OrderBook::cancel_id(uint64_t id){
 	}
 }
 
-void OrderBook::modify_order(uint64_t id, uint64_t new_size){
+void OrderBook::modify_order(uint64_t id, uint64_t new_size){ //modify order size by id
 	if (new_size == 0){
 		cancel_id(id);
 		return;
@@ -140,6 +139,46 @@ void OrderBook::modify_order(uint64_t id, uint64_t new_size){
 	}
 }
 
+void OrderBook::modify_price(uint64_t id, uint64_t new_price) {
+	Order saved;
+	bool found = false;
+	if (new_price == 0) {
+		cancel_id(id);
+		return;
+	}
+
+	for (auto& [price, orders] : bids) {
+		if (found) {
+			break;
+		}
+		for (auto it = orders.begin(); it != orders.end(); ++it) {
+			if (it->id == id) {
+				saved = *it;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	for (auto& [price, orders] : asks) {
+		if (found) {
+			break;
+		}
+		for (auto it = orders.begin(); it != orders.end(); ++it) {
+			if (it->id == id) {
+				saved = *it;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	if (found == true) {
+		cancel_id(id);
+		saved.price = new_price;
+		add_order(saved);
+	}
+}
 
 
 void OrderBook::print() const
@@ -201,6 +240,26 @@ std::size_t OrderBook::trade_count () const {
 
 uint64_t OrderBook::id_getter () const {
 	return Trades.back().resting_id;
+}
+
+uint64_t OrderBook::price_getter(uint64_t id) const {
+	for (const auto& [price, orders] : asks) {
+		for (auto it = orders.begin(); it != orders.end(); ++it) {
+			if (it->id == id) {
+				return it->price;
+			}
+		}
+	}
+
+	for (const auto& [price, orders] : bids) {
+		for (auto it = orders.begin(); it != orders.end(); ++it) {
+			if (it->id == id) {
+				return it->price;
+			}
+		}
+	}
+
+	return 0;
 }
 
 uint64_t OrderBook::size_getter (uint64_t id) const {

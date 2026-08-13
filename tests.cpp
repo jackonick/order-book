@@ -131,5 +131,25 @@ TEST(Modifying, BasicModify){
 
     book.modify_order(1, 0);
     EXPECT_EQ(book.bid_levels(), 0);
+}
 
+
+
+TEST(Modify_price, price) {
+    OrderBook book;
+
+    Order o1;
+    o1.id = 2;
+    o1.side = Side::BUY;
+    o1.price = 100;
+    o1.size = 1;
+    o1.timestamp = 4;
+    book.add_order(o1);
+    EXPECT_EQ(book.size_getter(2), 1);
+
+    book.modify_price(2, 105);
+    EXPECT_EQ(book.price_getter(2), 105);
+
+    book.modify_price(2, 110);
+    EXPECT_EQ(book.price_getter(2), 110);
 }
