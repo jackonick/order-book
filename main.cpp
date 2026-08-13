@@ -57,6 +57,7 @@ int main()
 	std::cout << "\n--- After BUY id=5 (walks both ask levels) ---\n";
     
     book.printTrade();
+	book.printBbo();
 
 	return 0;
 }

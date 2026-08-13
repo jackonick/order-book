@@ -4,6 +4,8 @@
 #include <vector>
 #include <filesystem>
 #include <fstream>
+#include <limits>
+#include <optional>
 
 void OrderBook::add_order(Order incoming)
 {
@@ -224,6 +226,27 @@ void OrderBook::printTrade() const
 		file << t.resting_price << "\n";
 	}
 	file.close();
+}
+
+void OrderBook::printBbo() const {
+	if (!bids.empty()) {
+		std::cout << " best bid: " << bids.begin()->first;
+	}
+	else {
+		std::cout << " no bids. \n";
+	}
+
+	if (!asks.empty()) {
+		std::cout << "| best ask: " << asks.begin()->first;
+	}
+	else {
+		std::cout << "| no asks. \n";
+	}
+
+	if (!bids.empty() && !asks.empty()) {
+		uint64_t spread = asks.begin()->first - bids.begin()->first;
+		std::cout << "spread: " << spread << "\n";
+	}
 }
 
 std::size_t OrderBook::bid_levels () const{

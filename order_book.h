@@ -33,6 +33,7 @@ public:
 	void modify_price(uint64_t id, uint64_t price);
 	void print() const;
 	void printTrade() const;
+	void printBbo() const;
 
 	std::size_t bid_levels() const;
 	std::size_t ask_levels() const;
