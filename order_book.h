@@ -10,8 +10,18 @@ enum class Side {
 	SELL
 };
 
+enum class Type {
+	GTC,
+	FOK,
+	MARKET,
+	IOC,
+	BOC, //book or cancel
+	iceberg
+};
+
 struct Order {
 	Side side;
+	Type type;
 	uint64_t price;
 	uint64_t timestamp;
 	uint64_t id;

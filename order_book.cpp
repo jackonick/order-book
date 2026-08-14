@@ -11,9 +11,9 @@ void OrderBook::add_order(Order incoming)
 {
 	if (incoming.side == Side::BUY)
 	{
-		while (incoming.size > 0 && !asks.empty() && asks.begin()->first <= incoming.price)
+		while (incoming.size > 0 && !asks.empty() && (incoming.type == Type::MARKET || asks.begin()->first <= incoming.price))
 		{
-			Order &resting = asks.begin()->second.front();
+			Order& resting = asks.begin()->second.front();
 			uint64_t trade_size = std::min(incoming.size, resting.size);
 
 			incoming.size -= trade_size;
@@ -35,16 +35,17 @@ void OrderBook::add_order(Order incoming)
 				}
 			}
 		}
-
-		if (incoming.size > 0)
-		{
-			bids[incoming.price].push_back(incoming);
+		if (incoming.type != Type::IOC && incoming.type != Type::MARKET){
+			if (incoming.size > 0)
+			{
+				bids[incoming.price].push_back(incoming);
+			}
 		}
 	}
 
 	else if (incoming.side == Side::SELL)
 	{
-		while (incoming.size > 0 && !bids.empty() && bids.begin()->first >= incoming.price)
+		while (incoming.size > 0 && !bids.empty() && (incoming.type == Type::MARKET || bids.begin()->first >= incoming.price))
 		{
 			Order &resting = bids.begin()->second.front();
 			uint64_t trade_size = std::min(incoming.size, resting.size);
@@ -69,9 +70,11 @@ void OrderBook::add_order(Order incoming)
 			}
 		}
 
-		if (incoming.size > 0)
-		{
-			asks[incoming.price].push_back(incoming);
+		if (incoming.type != Type::IOC && incoming.type != Type::MARKET) {
+			if (incoming.size > 0)
+			{
+				asks[incoming.price].push_back(incoming);
+			}
 		}
 	}
 }
@@ -147,7 +150,7 @@ void OrderBook::modify_price(uint64_t id, uint64_t new_price) {
 		return;
 	}
 	
-	Order saved = *found;
+	saved = *found;
 	cancel_id(id);
 	saved.price = new_price;
 	add_order(saved);

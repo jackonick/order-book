@@ -153,3 +153,29 @@ TEST(Modify_price, price) {
     book.modify_price(2, 110);
     EXPECT_EQ(book.price_getter(2), 110);
 }
+
+TEST(market_test, market) {
+    OrderBook book;
+
+    Order o2;
+    o2.id = 3;
+    o2.side = Side::SELL;
+    o2.price = 90;
+    o2.size = 5;
+    o2.timestamp = 4;
+    book.add_order(o2);
+    EXPECT_EQ(book.size_getter(3), (5));
+
+    Order o1;
+    o1.id = 2;
+    o1.side = Side::BUY;
+    o1.price = 100;
+    o1.size = 1;
+    o1.timestamp = 4;
+    o1.type = Type::MARKET;
+    book.add_order(o1);
+
+    EXPECT_EQ(book.size_getter(3), (4));
+
+    book.trade_count();
+}
