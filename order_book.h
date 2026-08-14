@@ -34,13 +34,15 @@ public:
 	void print() const;
 	void printTrade() const;
 	void printBbo() const;
+	void printDepth(int N) const;
 
 	std::size_t bid_levels() const;
 	std::size_t ask_levels() const;
 	std::size_t trade_count() const;
 	uint64_t id_getter() const;
-	uint64_t size_getter(uint64_t id) const;
-	uint64_t price_getter(uint64_t id) const;
+	uint64_t size_getter(uint64_t id);
+	uint64_t price_getter(uint64_t id);
+	Order* id_searcher(uint64_t id);
 
 
 private:

@@ -124,62 +124,33 @@ void OrderBook::modify_order(uint64_t id, uint64_t new_size){ //modify order siz
 		return;
 	}
 
-	for (auto& [price, orders] : asks){
-		for (auto it = orders.begin(); it != orders.end(); ++it){
-			if (it->id == id){
-				it->size = new_size;
-			}
-		}
+	Order* found = id_searcher(id);
+	if (found == nullptr) {
+		std::cerr << "id searcher returned null\n";
+		return;
 	}
 
-	for (auto& [price, orders] : bids){
-		for (auto it = orders.begin(); it != orders.end(); ++it){
-			if (it->id == id){
-				it->size = new_size;
-			}
-		}
-	}
+	found->size = new_size;
 }
 
 void OrderBook::modify_price(uint64_t id, uint64_t new_price) {
 	Order saved;
-	bool found = false;
+	
 	if (new_price == 0) {
 		cancel_id(id);
 		return;
 	}
 
-	for (auto& [price, orders] : bids) {
-		if (found) {
-			break;
-		}
-		for (auto it = orders.begin(); it != orders.end(); ++it) {
-			if (it->id == id) {
-				saved = *it;
-				found = true;
-				break;
-			}
-		}
+	Order* found = id_searcher(id);
+	if (found == nullptr) {
+		std::cerr << "id searcher returned null\n";
+		return;
 	}
-
-	for (auto& [price, orders] : asks) {
-		if (found) {
-			break;
-		}
-		for (auto it = orders.begin(); it != orders.end(); ++it) {
-			if (it->id == id) {
-				saved = *it;
-				found = true;
-				break;
-			}
-		}
-	}
-
-	if (found == true) {
-		cancel_id(id);
-		saved.price = new_price;
-		add_order(saved);
-	}
+	
+	Order saved = *found;
+	cancel_id(id);
+	saved.price = new_price;
+	add_order(saved);
 }
 
 
@@ -233,7 +204,7 @@ void OrderBook::printBbo() const {
 		std::cout << " best bid: " << bids.begin()->first;
 	}
 	else {
-		std::cout << " no bids. \n";
+		std::cout << "| no bids. \n"; 
 	}
 
 	if (!asks.empty()) {
@@ -248,6 +219,38 @@ void OrderBook::printBbo() const {
 		std::cout << "spread: " << spread << "\n";
 	}
 }
+
+void OrderBook::printDepth(int N) const {
+	int count = 0;
+
+	std::cout << "---BIDS---\n";
+	for (auto& [price, orders] : bids) {
+		if (count >= N) {
+			break;
+		}
+		uint64_t total = 0;
+		for (auto& order : orders) {
+			total += order.size;
+		}
+		std::cout << "price: " << price << "| total: " << total << "\n";
+		count++;
+	}
+
+	count = 0;
+	std::cout << "---ASKS---\n";
+	for (auto& [price, orders] : asks) {
+		if (count >= N) {
+			break;
+		}
+		uint64_t total = 0;
+		for (auto& order : orders) {
+			total += order.size;
+		}
+		std::cout << "price: " << price << "| total: " << total << "\n";
+		count++;
+	}
+}
+
 
 std::size_t OrderBook::bid_levels () const{
 	return bids.size();
@@ -265,42 +268,41 @@ uint64_t OrderBook::id_getter () const {
 	return Trades.back().resting_id;
 }
 
-uint64_t OrderBook::price_getter(uint64_t id) const {
-	for (const auto& [price, orders] : asks) {
-		for (auto it = orders.begin(); it != orders.end(); ++it) {
-			if (it->id == id) {
-				return it->price;
-			}
-		}
+uint64_t OrderBook::price_getter(uint64_t id){
+	Order* found = id_searcher(id);
+	if (found == nullptr) {
+		std::cerr << "id searcher returned null\n";
+		return 0;
 	}
 
-	for (const auto& [price, orders] : bids) {
-		for (auto it = orders.begin(); it != orders.end(); ++it) {
-			if (it->id == id) {
-				return it->price;
-			}
-		}
-	}
-
-	return 0;
+	return found->price;
 }
 
-uint64_t OrderBook::size_getter (uint64_t id) const {
-	for (const auto& [price, orders] : asks){
-		for (auto it = orders.begin(); it != orders.end(); ++it){
-			if (it->id == id){
-				return it->size;
+Order* OrderBook::id_searcher(uint64_t id) {
+	for (auto& [price, orders] : asks) {
+		for (auto it = orders.begin(); it != orders.end(); ++it) {
+			if (it->id == id) {
+				return &*it;
 			}
 		}
 	}
 
-	for (const auto& [price, orders] : bids){
-		for (auto it = orders.begin(); it != orders.end(); ++it){
-			if (it->id == id){
-				return it->size;
+	for (auto& [price, orders] : bids) {
+		for (auto it = orders.begin(); it != orders.end(); ++it) {
+			if (it->id == id) {
+				return &*it;
 			}
 		}
 	}
+	return nullptr;
+}
 
-	return 0;
+uint64_t OrderBook::size_getter (uint64_t id)  {
+	Order* found = id_searcher(id);
+	if (found == nullptr) {
+		std::cerr << "id searcher returned null\n";
+		return 0;
+	}
+
+	return found->size;
 }
