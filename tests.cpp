@@ -179,3 +179,38 @@ TEST(market_test, market) {
 
     book.trade_count();
 }
+
+
+TEST(fillOrKill, fok) {
+    OrderBook book;
+
+    Order o1;
+    o1.id = 3;
+    o1.side = Side::SELL;
+    o1.price = 90;
+    o1.size = 500;
+    o1.timestamp = 4;
+    book.add_order(o1);
+
+    Order o2;
+    o2.id = 4;
+    o2.side = Side::BUY;
+    o2.price = 90;
+    o2.size = 5;
+    o2.timestamp = 5;
+    o2.type = Type::FOK;
+    book.add_order(o2);
+
+    EXPECT_EQ(book.size_getter(3), (495));
+
+    Order o3;
+    o3.id = 5;
+    o3.side = Side::BUY;
+    o3.price = 92;
+    o3.size = 1000;
+    o3.timestamp = 6;
+    o3.type = Type::FOK;
+    book.add_order(o3);
+    
+    EXPECT_EQ(book.size_getter(3), (495));
+}
