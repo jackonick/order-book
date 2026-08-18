@@ -53,6 +53,7 @@ public:
 	uint64_t size_getter(uint64_t id);
 	uint64_t price_getter(uint64_t id);
 	Order* id_searcher(uint64_t id);
+	bool canFill(Order incoming, bool is_buy);
 
 
 private:

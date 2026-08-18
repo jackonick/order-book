@@ -7,31 +7,38 @@
 #include <limits>
 #include <optional>
 
+bool OrderBook::canFill(Order incoming, bool is_buy) { //true means buy 
+	bool canFillNotKill = false;
+	uint64_t volume = 0;
+
+	if (is_buy) {
+		for (auto& [price, orders] : asks) {
+			if (price <= incoming.price) {
+				for (auto& order : orders) {
+					volume += order.size;
+				}
+			}
+		}
+	}
+
+	else {
+		for (auto& [price, orders] : bids) {
+			if (price >= incoming.price) {
+				for (auto& order : orders) {
+					volume += order.size;
+				}
+			}
+		}
+	}
+
+	return volume >= incoming.size;
+}
+
 void OrderBook::add_order(Order incoming)
 {
 	if (incoming.side == Side::BUY)
 	{
-		bool canFillNotKill = false;
-		uint64_t volume = 0;
-
-		if (incoming.type == Type::FOK) {
-			for (auto& [price, orders] : asks) {
-				if (price <= incoming.price) {
-					for (auto& order : orders) {
-						volume += order.size;
-					}
-				}
-			}
-		}
-
-		if (volume >= incoming.size) {
-			canFillNotKill = true;
-		}
-
-		if (incoming.type == Type::FOK && !canFillNotKill) {
-			std::cerr << "Couldn't match buy FOK order.\n";
-			return;
-		}
+		if (incoming.type == Type::FOK && !canFill(incoming, true)) { return; }
 
 		while (incoming.size > 0 && !asks.empty() && (incoming.type == Type::MARKET || asks.begin()->first <= incoming.price))
 		{
@@ -67,27 +74,7 @@ void OrderBook::add_order(Order incoming)
 
 	else if (incoming.side == Side::SELL)
 	{
-		bool canFillNotKill = false;
-		uint64_t volume = 0;
-
-		if (incoming.type == Type::FOK) {
-			for (auto& [price, orders] : bids) {
-				if (price >= incoming.price) {
-					for (auto& order : orders) {
-						volume += order.size;
-					}
-				}
-			}
-		}
-
-		if (volume >= incoming.size) {
-			canFillNotKill = true;
-		}
-
-		if (incoming.type == Type::FOK && !canFillNotKill) {
-			std::cerr << "Couldn't match sell FOK order.\n";
-			return;
-		}
+		if (incoming.type == Type::FOK && !canFill(incoming, false)) { return; }
 
 		while (incoming.size > 0 && !bids.empty() && (incoming.type == Type::MARKET || bids.begin()->first >= incoming.price))
 		{
