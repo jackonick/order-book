@@ -38,6 +38,13 @@ void OrderBook::add_order(Order incoming)
 {
 	if (incoming.side == Side::BUY)
 	{
+		if (incoming.type == Type::BOC){
+			if (!asks.empty() && incoming.price >= asks.begin()->first){
+				std::cerr << "BOC rejected\n";
+				return;
+			}	
+		}
+
 		if (incoming.type == Type::FOK && !canFill(incoming, true)) { return; }
 
 		while (incoming.size > 0 && !asks.empty() && (incoming.type == Type::MARKET || asks.begin()->first <= incoming.price))
@@ -74,6 +81,13 @@ void OrderBook::add_order(Order incoming)
 
 	else if (incoming.side == Side::SELL)
 	{
+		if (incoming.type == Type::BOC){
+			if (!bids.empty() && incoming.price <= bids.begin()->first){
+				std::cerr << "BOC rejected\n";
+				return;
+			}
+		}
+		
 		if (incoming.type == Type::FOK && !canFill(incoming, false)) { return; }
 
 		while (incoming.size > 0 && !bids.empty() && (incoming.type == Type::MARKET || bids.begin()->first >= incoming.price))

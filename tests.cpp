@@ -214,3 +214,27 @@ TEST(fillOrKill, fok) {
     
     EXPECT_EQ(book.size_getter(3), (495));
 }
+
+TEST(restOrCancel, BOC){
+    OrderBook book;
+
+    Order o1;
+    o1.id = 84;
+    o1.side = Side::SELL;
+    o1.price = 100;
+    o1.size = 500;
+    o1.timestamp = 1;
+    book.add_order(o1);
+    
+    Order o2;
+    o2.id = 86;
+    o2.side = Side::BUY;
+    o2.price = 100;
+    o2.size = 400;
+    o2.timestamp = 100041;
+    o2.type = Type::BOC;
+    book.add_order(o2);
+
+    EXPECT_EQ(book.bid_levels(), 0);
+    EXPECT_EQ(book.trade_count(), 0);
+}
