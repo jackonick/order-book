@@ -37,6 +37,7 @@ struct Trade {
 
 class OrderBook {
 public:
+	OrderBook();
 	void add_order(Order incoming);
 	void cancel_id(uint64_t resting);
 	void modify_order(uint64_t id, uint64_t size);

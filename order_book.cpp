@@ -87,7 +87,7 @@ void OrderBook::add_order(Order incoming)
 				return;
 			}
 		}
-		
+
 		if (incoming.type == Type::FOK && !canFill(incoming, false)) { return; }
 
 		while (incoming.size > 0 && !bids.empty() && (incoming.type == Type::MARKET || bids.begin()->first >= incoming.price))
@@ -299,6 +299,9 @@ void OrderBook::printDepth(int N) const {
 	}
 }
 
+OrderBook::OrderBook(){
+	Trades.reserve(10000);
+}
 
 std::size_t OrderBook::bid_levels () const{
 	return bids.size();
