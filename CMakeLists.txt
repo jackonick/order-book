@@ -21,3 +21,16 @@ target_link_libraries(tests GTest::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(tests)
+
+
+# --- Google Benchmark ---
+FetchContent_Declare(
+  benchmark
+  URL https://github.com/google/benchmark/archive/refs/tags/v1.9.0.zip
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+)
+set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(benchmark)
+
+add_executable(benchmarks benchmark.cpp order_book.cpp)
+target_link_libraries(benchmarks benchmark::benchmark)
