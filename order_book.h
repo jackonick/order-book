@@ -3,6 +3,7 @@
 #include <map>
 #include <deque>
 #include <vector>
+#include <unordered_map>
 
 
 enum class Side {
@@ -35,6 +36,11 @@ struct Trade {
 	uint64_t incoming_id;
 };
 
+struct location {
+	uint64_t price;
+	Side side;
+};
+
 class OrderBook {
 public:
 	OrderBook();
@@ -61,4 +67,5 @@ private:
 	std::map<uint64_t, std::deque<Order>, std::greater<uint64_t>> bids;
 	std::map<uint64_t, std::deque<Order>> asks;
 	std::vector<Trade> Trades;
+	std::unordered_map<uint64_t, location> idIndex;
 };

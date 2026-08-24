@@ -65,16 +65,19 @@ void OrderBook::add_order(Order incoming)
 			if (resting.size == 0)
 			{
 				asks.begin()->second.pop_front();
+				idIndex.erase(resting.id);
 				if (asks.begin()->second.empty())
-				{
+				{ //if size is 0 delete order
 					asks.erase(asks.begin());
 				}
 			}
 		}
+
 		if (incoming.type != Type::IOC && incoming.type != Type::MARKET){
 			if (incoming.size > 0)
 			{
 				bids[incoming.price].push_back(incoming);
+				idIndex[incoming.id] = { incoming.price, incoming.side }; //add index for cancelbyId o(n)
 			}
 		}
 	}
@@ -108,6 +111,7 @@ void OrderBook::add_order(Order incoming)
 			if (resting.size == 0)
 			{
 				bids.begin()->second.pop_front();
+				idIndex.erase(resting.id);
 				if (bids.begin()->second.empty())
 				{
 					bids.erase(bids.begin());
@@ -119,50 +123,49 @@ void OrderBook::add_order(Order incoming)
 			if (incoming.size > 0)
 			{
 				asks[incoming.price].push_back(incoming);
+				idIndex[incoming.id] = { incoming.price, incoming.side };
 			}
 		}
 	}
 }
 
-void OrderBook::cancel_id(uint64_t id){
-	uint64_t savedPrice = 0;
-	bool found = false;
-	for (auto& [price, orders] : bids){
-		if (found){
-			break;
-		}
-		for (auto it = orders.begin(); it != orders.end(); ++it){
-			if (it->id == id){
-				orders.erase(it);
-				savedPrice = price;
-				found = true;
-				break;
-			}
-		}
-	}
-	if (found && bids[savedPrice].empty()){
-		bids.erase(savedPrice);
-	}
 
-	if (found){
+void OrderBook::cancel_id(uint64_t id){
+	auto it = idIndex.find(id);
+	if (it == idIndex.end()) {
 		return;
 	}
 
-	for (auto& [price, orders] : asks){
-		if (found){
-			break;
-		}
-		for (auto it = orders.begin(); it != orders.end(); ++it){
-			if (it->id == id){
-				orders.erase(it);
-				savedPrice = price;
-				found = true;
+	location loc = it->second;
+
+	if (loc.side == Side::BUY) {
+		auto& deque = bids[loc.price];
+		for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+			if (oit->id == id) {
+				deque.erase(oit);
+				idIndex.erase(id);
 				break;
 			}
 		}
+
+		if (bids[loc.price].empty()) {
+			bids.erase(loc.price);
+		}
 	}
-	if (found && asks[savedPrice].empty()){
-		asks.erase(savedPrice);
+
+	else {
+		auto& deque = asks[loc.price];
+		for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+			if (oit->id == id) {
+				deque.erase(oit);
+				idIndex.erase(id);
+				break;
+			}
+		}
+
+		if (asks[loc.price].empty()) {
+			asks.erase(loc.price);
+		}
 	}
 }
 
@@ -180,6 +183,7 @@ void OrderBook::modify_order(uint64_t id, uint64_t new_size){ //modify order siz
 
 	found->size = new_size;
 }
+
 
 void OrderBook::modify_price(uint64_t id, uint64_t new_price) {
 	Order saved;
@@ -224,6 +228,7 @@ void OrderBook::print() const
 		}
 	}
 }
+
 
 void OrderBook::printTrade() const
 {
