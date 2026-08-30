@@ -62,13 +62,25 @@ void OrderBook::add_order(Order incoming)
 			t1.incoming_id = incoming.id;
 			Trades.push_back(t1);
 
-			if (resting.size == 0)
-			{
-				asks.begin()->second.pop_front();
-				idIndex.erase(resting.id);
-				if (asks.begin()->second.empty())
-				{ //if size is 0 delete order
-					asks.erase(asks.begin());
+			if (resting.size == 0) {
+				if (resting.type == Type::iceberg && resting.reserve > 0) {
+					Order refill = resting;
+					uint64_t slice = std::min(refill.display_size, refill.reserve);
+
+					refill.size = slice;
+					refill.reserve -= slice;
+
+					asks.begin()->second.pop_front();
+					asks[refill.price].push_back(refill);
+				}
+
+				else {
+					asks.begin()->second.pop_front();
+					idIndex.erase(resting.id);
+					if (asks.begin()->second.empty())
+					{
+						asks.erase(asks.begin());
+					}
 				}
 			}
 		}
@@ -108,13 +120,25 @@ void OrderBook::add_order(Order incoming)
 			t1.incoming_id = incoming.id;
 			Trades.push_back(t1);
 
-			if (resting.size == 0)
-			{
-				bids.begin()->second.pop_front();
-				idIndex.erase(resting.id);
-				if (bids.begin()->second.empty())
-				{
-					bids.erase(bids.begin());
+			if (resting.size == 0) {
+				if (resting.type == Type::iceberg && resting.reserve > 0) {
+					Order refill = resting;
+					uint64_t slice = std::min(refill.display_size, refill.reserve);
+		
+					refill.size = slice;
+					refill.reserve -= slice;
+					
+					bids.begin()->second.pop_front();
+					bids[refill.price].push_back(refill);
+				}
+
+				else {
+					bids.begin()->second.pop_front();
+					idIndex.erase(resting.id);
+					if (bids.begin()->second.empty())
+					{
+						bids.erase(bids.begin());
+					}
 				}
 			}
 		}

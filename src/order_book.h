@@ -27,6 +27,8 @@ struct Order {
 	uint64_t timestamp;
 	uint64_t id;
 	uint64_t size;
+	uint64_t reserve;
+	uint64_t display_size;
 };
 
 struct Trade {

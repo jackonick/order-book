@@ -238,3 +238,49 @@ TEST(restOrCancel, BOC){
     EXPECT_EQ(book.bid_levels(), 0);
     EXPECT_EQ(book.trade_count(), 0);
 }
+
+TEST(iceBergOrder, IBG) {
+    OrderBook book;
+
+    Order o1;
+    o1.id = 84;
+    o1.side = Side::SELL;
+    o1.type = Type::iceberg;
+    o1.reserve = 1000;
+    o1.price = 100;
+    o1.size = 500;
+    o1.display_size = 500;
+    o1.timestamp = 1;
+    book.add_order(o1);
+
+    Order o2;
+    o2.id = 86;
+    o2.side = Side::BUY;
+    o2.price = 100;
+    o2.size = 500;
+    o2.timestamp = 100041;
+    o2.type = Type::GTC;
+    book.add_order(o2);
+    EXPECT_EQ(book.size_getter(84), 500);
+
+    Order o3;
+    o3.id = 87;
+    o3.side = Side::BUY;
+    o3.price = 100;
+    o3.size = 500;
+    o3.timestamp = 100045;
+    o3.type = Type::GTC;
+    book.add_order(o3);
+    EXPECT_EQ(book.size_getter(84), 500);
+
+    Order o4;
+    o4.id = 88;
+    o4.side = Side::BUY;
+    o4.price = 100;
+    o4.size = 500;
+    o4.timestamp = 100050;
+    o4.type = Type::GTC;
+    book.add_order(o4);
+    EXPECT_EQ(book.ask_levels(), 0);
+
+}
