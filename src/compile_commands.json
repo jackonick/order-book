@@ -1,0 +1,182 @@
+[
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -std=gnu++17 -o CMakeFiles\\orderbook.dir\\main.cpp.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\main.cpp\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/main.cpp",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/orderbook.dir/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -std=gnu++17 -o CMakeFiles\\orderbook.dir\\order_book.cpp.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\order_book.cpp\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/order_book.cpp",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/orderbook.dir/order_book.cpp.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest\" -std=gnu++17 -o CMakeFiles\\tests.dir\\tests.cpp.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\tests.cpp\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/tests.cpp",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/tests.dir/tests.cpp.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest\" -std=gnu++17 -o CMakeFiles\\tests.dir\\order_book.cpp.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\order_book.cpp\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/order_book.cpp",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/tests.dir/order_book.cpp.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -std=gnu++17 -o CMakeFiles\\benchmarks.dir\\benchmark.cpp.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\benchmark.cpp\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/benchmark.cpp",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/benchmarks.dir/benchmark.cpp.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -std=gnu++17 -o CMakeFiles\\benchmarks.dir\\order_book.cpp.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\order_book.cpp\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/order_book.cpp",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/benchmarks.dir/order_book.cpp.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googlemock/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googlemock\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest\" -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googlemock\\CMakeFiles\\gmock.dir\\src\\gmock-all.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\googletest-src\\googlemock\\src\\gmock-all.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googlemock/src/gmock-all.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googlemock/include\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googlemock\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest\" -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googlemock\\CMakeFiles\\gmock_main.dir\\src\\gmock_main.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\googletest-src\\googlemock\\src\\gmock_main.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googlemock/src/gmock_main.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest\" -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googletest\\CMakeFiles\\gtest.dir\\src\\gtest-all.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\googletest-src\\googletest\\src\\gtest-all.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest/src/gtest-all.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest\" -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googletest\\CMakeFiles\\gtest_main.dir\\src\\gtest_main.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\googletest-src\\googletest\\src\\gtest_main.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest/src/gtest_main.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -DBENCHMARK_VERSION=\\\"v1.9.0\\\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\benchmark.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\benchmark.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/benchmark.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/benchmark.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\benchmark_api_internal.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\benchmark_api_internal.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/benchmark_api_internal.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/benchmark_api_internal.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\benchmark_name.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\benchmark_name.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/benchmark_name.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/benchmark_name.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\benchmark_register.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\benchmark_register.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/benchmark_register.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/benchmark_register.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\benchmark_runner.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\benchmark_runner.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/benchmark_runner.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/benchmark_runner.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\check.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\check.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/check.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/check.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\colorprint.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\colorprint.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/colorprint.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/colorprint.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\commandlineflags.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\commandlineflags.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/commandlineflags.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/commandlineflags.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\complexity.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\complexity.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/complexity.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/complexity.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\console_reporter.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\console_reporter.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/console_reporter.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/console_reporter.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\counter.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\counter.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/counter.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/counter.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\csv_reporter.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\csv_reporter.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/csv_reporter.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/csv_reporter.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\json_reporter.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\json_reporter.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/json_reporter.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/json_reporter.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\perf_counters.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\perf_counters.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/perf_counters.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/perf_counters.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\reporter.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\reporter.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/reporter.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/reporter.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\statistics.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\statistics.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/statistics.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/statistics.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\string_util.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\string_util.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/string_util.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/string_util.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\sysinfo.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\sysinfo.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/sysinfo.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/sysinfo.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark.dir\\timers.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\timers.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/timers.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark.dir/timers.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DBENCHMARK_STATIC_DEFINE -DHAVE_STD_REGEX -DHAVE_STEADY_CLOCK -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src\"   -Wall  -Wextra  -Wshadow  -Wfloat-equal  -Wold-style-cast  -Wconversion  -Wsuggest-override  -pedantic  -pedantic-errors  -fstrict-aliasing  -Wno-deprecated-declarations  -Wstrict-aliasing -std=c++14 -fvisibility=hidden -fno-keep-inline-dllexport -o _deps\\benchmark-build\\src\\CMakeFiles\\benchmark_main.dir\\benchmark_main.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\benchmark-src\\src\\benchmark_main.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-src/src/benchmark_main.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/benchmark-build/src/CMakeFiles/benchmark_main.dir/benchmark_main.cc.obj"
+}
+]

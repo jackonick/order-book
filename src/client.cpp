@@ -1,30 +1,34 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
+#include "exchange.grpc.pb.h"
+#include <grpcpp/grpcpp.h>
+#include <iostream>
+
 
 int main() {
-    // 1. Create the socket (same as server)
-    int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sockfd < 0) { perror("socket"); exit(1); }
+    auto channel = grpc::CreateChannel("localhost:9000", grpc::InsecureChannelCredentials());
+    auto stub = exchange::Exchange::NewStub(channel);
 
-    // 2. Describe WHO we're sending to (the server's address/port)
-    struct sockaddr_in server_addr;
-    memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(9000);                       // must match server's port
-    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");     // localhost; the server's IP
+    exchange::NewOrderRequest request;
 
-    // 3. Send a datagram (YOUR logic: what to send)
-    const char* msg = "hello";
+    request.set_side(0);
+    request.set_price(100);
+    
+    exchange::OrderResponse response;
+    grpc::ClientContext context;
 
-    ssize_t n = sendto(sockfd, msg, strlen(msg), 0,
-        (struct sockaddr*)&server_addr, sizeof(server_addr));
+    grpc::Status status = stub->SubmitOrder(&context, request, &response);
+    
+    if (status.ok()) {
+        std::cout << "id: " << response.assigned_id()
+            << "status: " << response.accepted()
+            << "filled size: " << response.filled_size() << "\n";
+    }
 
-    if (n < 0) { perror("sendto"); exit(1); }
+    else {
+        std::cout << status.error_message() << "\n";
+    }
 
-    close(sockfd);
+
+
+
     return 0;
 }

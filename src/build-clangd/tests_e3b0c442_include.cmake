@@ -1,0 +1,5 @@
+if(EXISTS "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/tests_e3b0c442_tests.cmake")
+  include("C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/tests_e3b0c442_tests.cmake")
+else()
+  add_test(tests_NOT_BUILT tests_NOT_BUILT)
+endif()
