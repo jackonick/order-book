@@ -24,7 +24,7 @@ bool OrderBook::canFill(Order incoming, bool is_buy) { //true means buy
 	else {
 		for (auto& [price, orders] : bids) {
 			if (price >= incoming.price) {
-				for (auto& order : orders) {
+				for (auto&order : orders) {
 					volume += order.size;
 				}
 			}
@@ -34,18 +34,35 @@ bool OrderBook::canFill(Order incoming, bool is_buy) { //true means buy
 	return volume >= incoming.size;
 }
 
-void OrderBook::add_order(Order incoming)
+Outcome OrderBook::add_order(Order incoming)
 {
+  Outcome outcome;
+  uint64_t starting_size = incoming.size;
+  
 	if (incoming.side == Side::BUY)
 	{
 		if (incoming.type == Type::BOC){
 			if (!asks.empty() && incoming.price >= asks.begin()->first){
 				std::cerr << "BOC rejected\n";
-				return;
+
+        outcome.reason = Reason::BOC_CANCELLED;
+        outcome.quantity_rested = 0;
+        outcome.quantity_filled = 0;
+        outcome.assigned_id = incoming.id;
+
+				return outcome;
 			}	
 		}
 
-		if (incoming.type == Type::FOK && !canFill(incoming, true)) { return; }
+		if (incoming.type == Type::FOK && !canFill(incoming, true)) {
+
+      outcome.reason = Reason::FOK_NOT_FILLED;
+      outcome.quantity_rested = 0;
+      outcome.quantity_filled = 0;
+      outcome.assigned_id = incoming.id;
+
+      return outcome;
+    }
 
 		while (incoming.size > 0 && !asks.empty() && (incoming.type == Type::MARKET || asks.begin()->first <= incoming.price))
 		{
@@ -85,11 +102,18 @@ void OrderBook::add_order(Order incoming)
 			}
 		}
 
+    outcome.quantity_filled = starting_size - incoming.size;
+    outcome.quantity_rested = 0;
+    outcome.assigned_id = incoming.id;
+    outcome.reason = Reason::ACCEPTED;
+
 		if (incoming.type != Type::IOC && incoming.type != Type::MARKET){
 			if (incoming.size > 0)
 			{
 				bids[incoming.price].push_back(incoming);
-				idIndex[incoming.id] = { incoming.price, incoming.side }; //add index for cancelbyId o(n)
+				idIndex[incoming.id] = { incoming.price, incoming.side };
+
+        outcome.quantity_rested = incoming.size;
 			}
 		}
 	}
@@ -99,11 +123,24 @@ void OrderBook::add_order(Order incoming)
 		if (incoming.type == Type::BOC){
 			if (!bids.empty() && incoming.price <= bids.begin()->first){
 				std::cerr << "BOC rejected\n";
-				return;
+
+        outcome.reason = Reason::BOC_CANCELLED;
+        outcome.quantity_rested = 0;
+        outcome.quantity_filled = 0;
+        outcome.assigned_id = incoming.id;
+        
+				return outcome;
 			}
 		}
 
-		if (incoming.type == Type::FOK && !canFill(incoming, false)) { return; }
+		if (incoming.type == Type::FOK && !canFill(incoming, false)) { 
+      outcome.reason = Reason::FOK_NOT_FILLED;
+      outcome.quantity_rested = 0;
+      outcome.quantity_filled = 0;
+      outcome.assigned_id = incoming.id;
+
+      return outcome; 
+    }
 
 		while (incoming.size > 0 && !bids.empty() && (incoming.type == Type::MARKET || bids.begin()->first >= incoming.price))
 		{
@@ -143,14 +180,23 @@ void OrderBook::add_order(Order incoming)
 			}
 		}
 
+    outcome.quantity_filled = starting_size - incoming.size;
+    outcome.quantity_rested = 0;
+    outcome.assigned_id = incoming.id;
+    outcome.reason = Reason::ACCEPTED;
+
 		if (incoming.type != Type::IOC && incoming.type != Type::MARKET) {
 			if (incoming.size > 0)
 			{
 				asks[incoming.price].push_back(incoming);
 				idIndex[incoming.id] = { incoming.price, incoming.side };
+
+        outcome.quantity_rested = incoming.size;
 			}
 		}
 	}
+
+  return outcome;
 }
 
 

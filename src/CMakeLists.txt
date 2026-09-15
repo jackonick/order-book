@@ -37,7 +37,7 @@ target_link_libraries(benchmarks benchmark::benchmark)
 
 
 # --- gRPC / Protobuf ---
-find_package(protobuf CONFIG REQUIRED)
+find_package(Protobuf REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
 set(PROTO_FILE "${CMAKE_CURRENT_SOURCE_DIR}/exchange.proto")
