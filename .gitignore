@@ -19,3 +19,6 @@ trades.csv
 *.vcxproj.filters
 *.sln
 .vs/
+
+web/
+desktop/
