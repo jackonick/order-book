@@ -1,3 +1,0 @@
-// App icon. webview loads resource IDI_APPLICATION (32512) from the exe for its window icon,
-// and Explorer uses the same icon for orderbook-app.exe.
-32512 ICON "app.ico"
