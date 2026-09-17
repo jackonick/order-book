@@ -194,10 +194,15 @@ Outcome OrderBook::add_order(Order incoming) {
   return outcome;
 }
 
-void OrderBook::cancel_id(uint64_t id) {
+Outcome2 OrderBook::cancel_id(uint64_t id) {
+  Outcome2 outcome;
+  outcome.reason = Reason::CANCEL_ACCEPTED;
+  outcome.assigned_id = id;
+
   auto it = idIndex.find(id);
   if (it == idIndex.end()) {
-    return;
+    outcome.reason = Reason::CANCEL_FAILED;
+    return outcome;
   }
 
   location loc = it->second;
@@ -208,6 +213,8 @@ void OrderBook::cancel_id(uint64_t id) {
       if (oit->id == id) {
         deque.erase(oit);
         idIndex.erase(id);
+
+        outcome.reason = Reason::CANCEL_ACCEPTED;
         break;
       }
     }
@@ -223,6 +230,8 @@ void OrderBook::cancel_id(uint64_t id) {
       if (oit->id == id) {
         deque.erase(oit);
         idIndex.erase(id);
+
+        outcome.reason = Reason::CANCEL_ACCEPTED;
         break;
       }
     }
@@ -231,42 +240,62 @@ void OrderBook::cancel_id(uint64_t id) {
       asks.erase(loc.price);
     }
   }
+
+  return outcome;
 }
 
-void OrderBook::modify_order(uint64_t id,
+Outcome2 OrderBook::modify_order(uint64_t id,
                              uint64_t new_size) { // modify order size by id
+  Outcome2 outcome;
+  outcome.reason = Reason::MODIFY_ACCEPTED;
+  outcome.assigned_id = id;
+
   if (new_size == 0) {
     cancel_id(id);
-    return;
+    
+    outcome.reason = Reason::CANCEL_ACCEPTED;
+    return outcome;
   }
 
   Order *found = id_searcher(id);
   if (found == nullptr) {
     std::cerr << "id searcher returned null\n";
-    return;
+
+    outcome.reason = Reason::MODIFY_FAILED;
+    return outcome;
   }
 
   found->size = new_size;
+  return outcome;
 }
 
-void OrderBook::modify_price(uint64_t id, uint64_t new_price) {
+Outcome2 OrderBook::modify_price(uint64_t id, uint64_t new_price) {
   Order saved;
+  Outcome2 outcome;
+  outcome.reason = Reason::MODIFY_ACCEPTED;
+  outcome.assigned_id = id;
 
   if (new_price == 0) {
     cancel_id(id);
-    return;
+
+    outcome.reason = Reason::CANCEL_ACCEPTED;
+    return outcome;
   }
 
   Order *found = id_searcher(id);
   if (found == nullptr) {
     std::cerr << "id searcher returned null\n";
-    return;
+
+    outcome.reason = Reason::MODIFY_FAILED;
+    return outcome;
   }
 
   saved = *found;
   cancel_id(id);
   saved.price = new_price;
   add_order(saved);
+
+  return outcome;
 }
 
 void OrderBook::print() const {

@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/jackonick/code/order-book-v1/src/_deps/benchmark-subbuild/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

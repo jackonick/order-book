@@ -16,12 +16,26 @@ enum class Type {
   iceberg
 };
 
-enum class Reason { FOK_NOT_FILLED, IOC_NOT_FILLED, ACCEPTED, BOC_CANCELLED };
+enum class Reason { 
+  FOK_NOT_FILLED, 
+  IOC_NOT_FILLED, 
+  ACCEPTED, 
+  BOC_CANCELLED,
+  MODIFY_FAILED,
+  MODIFY_ACCEPTED,
+  CANCEL_FAILED,
+  CANCEL_ACCEPTED
+};
 
 struct Outcome {
   Reason reason;
   uint64_t quantity_rested = 0;
   uint64_t quantity_filled = 0;
+  uint64_t assigned_id = 0;
+};
+
+struct Outcome2 {
+  Reason reason;
   uint64_t assigned_id = 0;
 };
 
@@ -52,9 +66,9 @@ class OrderBook {
 public:
   OrderBook();
   Outcome add_order(Order incoming);
-  void cancel_id(uint64_t resting);
-  void modify_order(uint64_t id, uint64_t size);
-  void modify_price(uint64_t id, uint64_t price);
+  Outcome2 cancel_id(uint64_t resting);
+  Outcome2 modify_order(uint64_t id, uint64_t size);
+  Outcome2 modify_price(uint64_t id, uint64_t price);
   void print() const;
   void printTrade() const;
   void printBbo() const;
