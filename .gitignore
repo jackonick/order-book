@@ -20,5 +20,5 @@ trades.csv
 *.sln
 .vs/
 
-/web
-/desktop
+.web/
+.desktop/
