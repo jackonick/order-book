@@ -1,6 +1,9 @@
 C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/orderbook.dir
 C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/tests.dir
 C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/benchmarks.dir
+C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/exchange_proto.dir
+C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/server.dir
+C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/client.dir
 C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/test.dir
 C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/edit_cache.dir
 C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/rebuild_cache.dir

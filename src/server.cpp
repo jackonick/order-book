@@ -1,44 +1,61 @@
 #include "exchange.grpc.pb.h"
-#include <grpcpp/grpcpp.h>
 #include "order_book.h"
+#include <chrono>
+#include <grpcpp/grpcpp.h>
 #include <iostream>
+#include <mutex>
 
 class serverclass final : public exchange::Exchange::Service {
-    OrderBook book;
-    uint64_t counter{ 0 };
+  OrderBook book;
+  uint64_t counter{0};
+  std::mutex mtx;
 
-    grpc::Status SubmitOrder(grpc::ServerContext* context,
-        const exchange::NewOrderRequest* request,
-        exchange::OrderResponse* response) override {
-        
-        counter++;
+  grpc::Status SubmitOrder(grpc::ServerContext *context,
+                           const exchange::NewOrderRequest *request,
+                           exchange::OrderResponse *response) override {
+    std::lock_guard<std::mutex> lock(mtx);
+    counter++;
 
-        std::cout << "side: " << request->side()
-            << "type: " << request->order_type()
-            << "price: " << request->price()
-            << "size: " << request->size()
-            << "reserve size: " << request->reserve()
-            << "display size: " << request->display_size() << "\n";
+    Order o;
+    o.price = request->price();
+    o.size = request->size();
+    o.reserve = request->reserve();
+    o.display_size = request->display_size();
 
-        response->set_assigned_id(counter);
-        response->set_accepted(true);
-        response->set_filled_size(0);
+    o.side = static_cast<Side>(request->side());
+    o.type = static_cast<Type>(
+        request
+            ->order_type()); // make sure to confirm range for enum conversion
 
-        return grpc::Status::OK;
-    }
+    auto now = std::chrono::steady_clock::now();
+    uint64_t ts = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                      now.time_since_epoch())
+                      .count();
+
+    o.id = counter;
+    o.timestamp = ts;
+
+    Outcome outcome = book.add_order(o);
+
+    response->set_assigned_id(counter);
+    response->set_accepted(outcome.reason == Reason::ACCEPTED);
+    response->set_reason(static_cast<uint32_t>(outcome.reason));
+    response->set_filled_size(outcome.quantity_filled);
+
+    return grpc::Status::OK;
+  }
 };
 
-
 int main() {
-    std::string server_address{ "0.0.0.0:9000" };
+  std::string server_address{"0.0.0.0:9000"};
 
-    serverclass sc;
-    grpc::ServerBuilder builder;
-    builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-    builder.RegisterService(&sc);
+  serverclass sc;
+  grpc::ServerBuilder builder;
+  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  builder.RegisterService(&sc);
 
-    std::unique_ptr<grpc::Server> server = builder.BuildAndStart();
-    server->Wait();
+  std::unique_ptr<grpc::Server> server = builder.BuildAndStart();
+  server->Wait();
 
-    return 0;
+  return 0;
 }

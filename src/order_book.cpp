@@ -1,60 +1,58 @@
-#include <iostream>
 #include "order_book.h"
 #include <algorithm>
-#include <vector>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <optional>
+#include <vector>
 
-bool OrderBook::canFill(Order incoming, bool is_buy) { //true means buy 
-	bool canFillNotKill = false;
-	uint64_t volume = 0;
+bool OrderBook::canFill(Order incoming, bool is_buy) { // true means buy
+  bool canFillNotKill = false;
+  uint64_t volume = 0;
 
-	if (is_buy) {
-		for (auto& [price, orders] : asks) {
-			if (price <= incoming.price) {
-				for (auto& order : orders) {
-					volume += order.size;
-				}
-			}
-		}
-	}
+  if (is_buy) {
+    for (auto &[price, orders] : asks) {
+      if (price <= incoming.price) {
+        for (auto &order : orders) {
+          volume += order.size;
+        }
+      }
+    }
+  }
 
-	else {
-		for (auto& [price, orders] : bids) {
-			if (price >= incoming.price) {
-				for (auto&order : orders) {
-					volume += order.size;
-				}
-			}
-		}
-	}
+  else {
+    for (auto &[price, orders] : bids) {
+      if (price >= incoming.price) {
+        for (auto &order : orders) {
+          volume += order.size;
+        }
+      }
+    }
+  }
 
-	return volume >= incoming.size;
+  return volume >= incoming.size;
 }
 
-Outcome OrderBook::add_order(Order incoming)
-{
+Outcome OrderBook::add_order(Order incoming) {
   Outcome outcome;
   uint64_t starting_size = incoming.size;
-  
-	if (incoming.side == Side::BUY)
-	{
-		if (incoming.type == Type::BOC){
-			if (!asks.empty() && incoming.price >= asks.begin()->first){
-				std::cerr << "BOC rejected\n";
+
+  if (incoming.side == Side::BUY) {
+    if (incoming.type == Type::BOC) {
+      if (!asks.empty() && incoming.price >= asks.begin()->first) {
+        std::cerr << "BOC rejected\n";
 
         outcome.reason = Reason::BOC_CANCELLED;
         outcome.quantity_rested = 0;
         outcome.quantity_filled = 0;
         outcome.assigned_id = incoming.id;
 
-				return outcome;
-			}	
-		}
+        return outcome;
+      }
+    }
 
-		if (incoming.type == Type::FOK && !canFill(incoming, true)) {
+    if (incoming.type == Type::FOK && !canFill(incoming, true)) {
 
       outcome.reason = Reason::FOK_NOT_FILLED;
       outcome.quantity_rested = 0;
@@ -64,371 +62,347 @@ Outcome OrderBook::add_order(Order incoming)
       return outcome;
     }
 
-		while (incoming.size > 0 && !asks.empty() && (incoming.type == Type::MARKET || asks.begin()->first <= incoming.price))
-		{
-			Order& resting = asks.begin()->second.front();
-			uint64_t trade_size = std::min(incoming.size, resting.size);
+    while (incoming.size > 0 && !asks.empty() &&
+           (incoming.type == Type::MARKET ||
+            asks.begin()->first <= incoming.price)) {
+      Order &resting = asks.begin()->second.front();
+      uint64_t trade_size = std::min(incoming.size, resting.size);
 
-			incoming.size -= trade_size;
-			resting.size -= trade_size;
+      incoming.size -= trade_size;
+      resting.size -= trade_size;
 
-			Trade t1;
-			t1.resting_id = resting.id;
-			t1.resting_price = resting.price;
-			t1.trade_size = trade_size;
-			t1.incoming_id = incoming.id;
-			Trades.push_back(t1);
+      Trade t1;
+      t1.resting_id = resting.id;
+      t1.resting_price = resting.price;
+      t1.trade_size = trade_size;
+      t1.incoming_id = incoming.id;
+      Trades.push_back(t1);
 
-			if (resting.size == 0) {
-				if (resting.type == Type::iceberg && resting.reserve > 0) {
-					Order refill = resting;
-					uint64_t slice = std::min(refill.display_size, refill.reserve);
+      if (resting.size == 0) {
+        if (resting.type == Type::iceberg && resting.reserve > 0) {
+          Order refill = resting;
+          uint64_t slice = std::min(refill.display_size, refill.reserve);
 
-					refill.size = slice;
-					refill.reserve -= slice;
+          refill.size = slice;
+          refill.reserve -= slice;
 
-					asks.begin()->second.pop_front();
-					asks[refill.price].push_back(refill);
-				}
+          asks.begin()->second.pop_front();
+          asks[refill.price].push_back(refill);
+        }
 
-				else {
-					asks.begin()->second.pop_front();
-					idIndex.erase(resting.id);
-					if (asks.begin()->second.empty())
-					{
-						asks.erase(asks.begin());
-					}
-				}
-			}
-		}
+        else {
+          asks.begin()->second.pop_front();
+          idIndex.erase(resting.id);
+          if (asks.begin()->second.empty()) {
+            asks.erase(asks.begin());
+          }
+        }
+      }
+    }
 
     outcome.quantity_filled = starting_size - incoming.size;
     outcome.quantity_rested = 0;
     outcome.assigned_id = incoming.id;
     outcome.reason = Reason::ACCEPTED;
 
-		if (incoming.type != Type::IOC && incoming.type != Type::MARKET){
-			if (incoming.size > 0)
-			{
-				bids[incoming.price].push_back(incoming);
-				idIndex[incoming.id] = { incoming.price, incoming.side };
+    if (incoming.type != Type::IOC && incoming.type != Type::MARKET) {
+      if (incoming.size > 0) {
+        bids[incoming.price].push_back(incoming);
+        idIndex[incoming.id] = {incoming.price, incoming.side};
 
         outcome.quantity_rested = incoming.size;
-			}
-		}
-	}
+      }
+    }
+  }
 
-	else if (incoming.side == Side::SELL)
-	{
-		if (incoming.type == Type::BOC){
-			if (!bids.empty() && incoming.price <= bids.begin()->first){
-				std::cerr << "BOC rejected\n";
+  else if (incoming.side == Side::SELL) {
+    if (incoming.type == Type::BOC) {
+      if (!bids.empty() && incoming.price <= bids.begin()->first) {
+        std::cerr << "BOC rejected\n";
 
         outcome.reason = Reason::BOC_CANCELLED;
         outcome.quantity_rested = 0;
         outcome.quantity_filled = 0;
         outcome.assigned_id = incoming.id;
-        
-				return outcome;
-			}
-		}
 
-		if (incoming.type == Type::FOK && !canFill(incoming, false)) { 
+        return outcome;
+      }
+    }
+
+    if (incoming.type == Type::FOK && !canFill(incoming, false)) {
       outcome.reason = Reason::FOK_NOT_FILLED;
       outcome.quantity_rested = 0;
       outcome.quantity_filled = 0;
       outcome.assigned_id = incoming.id;
 
-      return outcome; 
+      return outcome;
     }
 
-		while (incoming.size > 0 && !bids.empty() && (incoming.type == Type::MARKET || bids.begin()->first >= incoming.price))
-		{
-			Order &resting = bids.begin()->second.front();
-			uint64_t trade_size = std::min(incoming.size, resting.size);
+    while (incoming.size > 0 && !bids.empty() &&
+           (incoming.type == Type::MARKET ||
+            bids.begin()->first >= incoming.price)) {
+      Order &resting = bids.begin()->second.front();
+      uint64_t trade_size = std::min(incoming.size, resting.size);
 
-			incoming.size -= trade_size;
-			resting.size -= trade_size;
+      incoming.size -= trade_size;
+      resting.size -= trade_size;
 
-			Trade t1;
-			t1.resting_id = resting.id;
-			t1.resting_price = resting.price;
-			t1.trade_size = trade_size;
-			t1.incoming_id = incoming.id;
-			Trades.push_back(t1);
+      Trade t1;
+      t1.resting_id = resting.id;
+      t1.resting_price = resting.price;
+      t1.trade_size = trade_size;
+      t1.incoming_id = incoming.id;
+      Trades.push_back(t1);
 
-			if (resting.size == 0) {
-				if (resting.type == Type::iceberg && resting.reserve > 0) {
-					Order refill = resting;
-					uint64_t slice = std::min(refill.display_size, refill.reserve);
-		
-					refill.size = slice;
-					refill.reserve -= slice;
-					
-					bids.begin()->second.pop_front();
-					bids[refill.price].push_back(refill);
-				}
+      if (resting.size == 0) {
+        if (resting.type == Type::iceberg && resting.reserve > 0) {
+          Order refill = resting;
+          uint64_t slice = std::min(refill.display_size, refill.reserve);
 
-				else {
-					bids.begin()->second.pop_front();
-					idIndex.erase(resting.id);
-					if (bids.begin()->second.empty())
-					{
-						bids.erase(bids.begin());
-					}
-				}
-			}
-		}
+          refill.size = slice;
+          refill.reserve -= slice;
+
+          bids.begin()->second.pop_front();
+          bids[refill.price].push_back(refill);
+        }
+
+        else {
+          bids.begin()->second.pop_front();
+          idIndex.erase(resting.id);
+          if (bids.begin()->second.empty()) {
+            bids.erase(bids.begin());
+          }
+        }
+      }
+    }
 
     outcome.quantity_filled = starting_size - incoming.size;
     outcome.quantity_rested = 0;
     outcome.assigned_id = incoming.id;
     outcome.reason = Reason::ACCEPTED;
 
-		if (incoming.type != Type::IOC && incoming.type != Type::MARKET) {
-			if (incoming.size > 0)
-			{
-				asks[incoming.price].push_back(incoming);
-				idIndex[incoming.id] = { incoming.price, incoming.side };
+    if (incoming.type != Type::IOC && incoming.type != Type::MARKET) {
+      if (incoming.size > 0) {
+        asks[incoming.price].push_back(incoming);
+        idIndex[incoming.id] = {incoming.price, incoming.side};
 
         outcome.quantity_rested = incoming.size;
-			}
-		}
-	}
+      }
+    }
+  }
 
   return outcome;
 }
 
+void OrderBook::cancel_id(uint64_t id) {
+  auto it = idIndex.find(id);
+  if (it == idIndex.end()) {
+    return;
+  }
 
-void OrderBook::cancel_id(uint64_t id){
-	auto it = idIndex.find(id);
-	if (it == idIndex.end()) {
-		return;
-	}
+  location loc = it->second;
 
-	location loc = it->second;
+  if (loc.side == Side::BUY) {
+    auto &deque = bids[loc.price];
+    for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+      if (oit->id == id) {
+        deque.erase(oit);
+        idIndex.erase(id);
+        break;
+      }
+    }
 
-	if (loc.side == Side::BUY) {
-		auto& deque = bids[loc.price];
-		for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
-			if (oit->id == id) {
-				deque.erase(oit);
-				idIndex.erase(id);
-				break;
-			}
-		}
+    if (bids[loc.price].empty()) {
+      bids.erase(loc.price);
+    }
+  }
 
-		if (bids[loc.price].empty()) {
-			bids.erase(loc.price);
-		}
-	}
+  else {
+    auto &deque = asks[loc.price];
+    for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+      if (oit->id == id) {
+        deque.erase(oit);
+        idIndex.erase(id);
+        break;
+      }
+    }
 
-	else {
-		auto& deque = asks[loc.price];
-		for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
-			if (oit->id == id) {
-				deque.erase(oit);
-				idIndex.erase(id);
-				break;
-			}
-		}
-
-		if (asks[loc.price].empty()) {
-			asks.erase(loc.price);
-		}
-	}
+    if (asks[loc.price].empty()) {
+      asks.erase(loc.price);
+    }
+  }
 }
 
-void OrderBook::modify_order(uint64_t id, uint64_t new_size){ //modify order size by id
-	if (new_size == 0){
-		cancel_id(id);
-		return;
-	}
+void OrderBook::modify_order(uint64_t id,
+                             uint64_t new_size) { // modify order size by id
+  if (new_size == 0) {
+    cancel_id(id);
+    return;
+  }
 
-	Order* found = id_searcher(id);
-	if (found == nullptr) {
-		std::cerr << "id searcher returned null\n";
-		return;
-	}
+  Order *found = id_searcher(id);
+  if (found == nullptr) {
+    std::cerr << "id searcher returned null\n";
+    return;
+  }
 
-	found->size = new_size;
+  found->size = new_size;
 }
-
 
 void OrderBook::modify_price(uint64_t id, uint64_t new_price) {
-	Order saved;
-	
-	if (new_price == 0) {
-		cancel_id(id);
-		return;
-	}
+  Order saved;
 
-	Order* found = id_searcher(id);
-	if (found == nullptr) {
-		std::cerr << "id searcher returned null\n";
-		return;
-	}
-	
-	saved = *found;
-	cancel_id(id);
-	saved.price = new_price;
-	add_order(saved);
+  if (new_price == 0) {
+    cancel_id(id);
+    return;
+  }
+
+  Order *found = id_searcher(id);
+  if (found == nullptr) {
+    std::cerr << "id searcher returned null\n";
+    return;
+  }
+
+  saved = *found;
+  cancel_id(id);
+  saved.price = new_price;
+  add_order(saved);
 }
 
+void OrderBook::print() const {
+  std::cout << "---ASKS---\n";
+  for (const auto &[price, orders] : asks) {
+    std::cout << " Price= " << price << "\n";
+    for (const auto &order : orders) {
+      std::cout << " Order_ID=" << order.id << " Order_Size=" << order.size
+                << "\n";
+    }
+  }
 
-void OrderBook::print() const
-{
-	std::cout << "---ASKS---\n";
-	for (const auto &[price, orders] : asks)
-	{
-		std::cout << " Price= " << price << "\n";
-		for (const auto &order : orders)
-		{
-			std::cout << " Order_ID=" << order.id << " Order_Size=" << order.size << "\n";
-		}
-	}
-
-	std::cout << "---BIDS---\n";
-	for (const auto &[price, orders] : bids)
-	{
-		std::cout << " Price= " << price << "\n";
-		for (const auto &order : orders)
-		{
-			std::cout << " Order_ID=" << order.id << " Order_Size=" << order.size << "\n";
-		}
-	}
+  std::cout << "---BIDS---\n";
+  for (const auto &[price, orders] : bids) {
+    std::cout << " Price= " << price << "\n";
+    for (const auto &order : orders) {
+      std::cout << " Order_ID=" << order.id << " Order_Size=" << order.size
+                << "\n";
+    }
+  }
 }
 
+void OrderBook::printTrade() const {
+  std::cout << "---TRADES---\n";
+  std::fstream file("trades.csv", std::ios::out);
 
-void OrderBook::printTrade() const
-{
-	std::cout << "---TRADES---\n";
-	std::fstream file("trades.csv", std::ios::out);
+  if (!file.is_open()) {
+    std::cerr << "Error: couldnt create or open file. \n";
+  }
 
-	if (!file.is_open())
-	{
-		std::cerr << "Error: couldnt create or open file. \n";
-	}
+  file << "resting id, trade size, incoming id, resting price\n"; // header line
 
-	file << "resting id, trade size, incoming id, resting price\n"; // header line
-
-	for (const auto &t : Trades)
-	{
-		file << t.resting_id << ",";
-		file << t.trade_size << ",";
-		file << t.incoming_id << ",";
-		file << t.resting_price << "\n";
-	}
-	file.close();
+  for (const auto &t : Trades) {
+    file << t.resting_id << ",";
+    file << t.trade_size << ",";
+    file << t.incoming_id << ",";
+    file << t.resting_price << "\n";
+  }
+  file.close();
 }
 
 void OrderBook::printBbo() const {
-	if (!bids.empty()) {
-		std::cout << " best bid: " << bids.begin()->first;
-	}
-	else {
-		std::cout << "| no bids. \n"; 
-	}
+  if (!bids.empty()) {
+    std::cout << " best bid: " << bids.begin()->first;
+  } else {
+    std::cout << "| no bids. \n";
+  }
 
-	if (!asks.empty()) {
-		std::cout << "| best ask: " << asks.begin()->first;
-	}
-	else {
-		std::cout << "| no asks. \n";
-	}
+  if (!asks.empty()) {
+    std::cout << "| best ask: " << asks.begin()->first;
+  } else {
+    std::cout << "| no asks. \n";
+  }
 
-	if (!bids.empty() && !asks.empty()) {
-		uint64_t spread = asks.begin()->first - bids.begin()->first;
-		std::cout << "spread: " << spread << "\n";
-	}
+  if (!bids.empty() && !asks.empty()) {
+    uint64_t spread = asks.begin()->first - bids.begin()->first;
+    std::cout << "spread: " << spread << "\n";
+  }
 }
 
 void OrderBook::printDepth(int N) const {
-	int count = 0;
+  int count = 0;
 
-	std::cout << "---BIDS---\n";
-	for (auto& [price, orders] : bids) {
-		if (count >= N) {
-			break;
-		}
-		uint64_t total = 0;
-		for (auto& order : orders) {
-			total += order.size;
-		}
-		std::cout << "price: " << price << "| total: " << total << "\n";
-		count++;
-	}
+  std::cout << "---BIDS---\n";
+  for (auto &[price, orders] : bids) {
+    if (count >= N) {
+      break;
+    }
+    uint64_t total = 0;
+    for (auto &order : orders) {
+      total += order.size;
+    }
+    std::cout << "price: " << price << "| total: " << total << "\n";
+    count++;
+  }
 
-	count = 0;
-	std::cout << "---ASKS---\n";
-	for (auto& [price, orders] : asks) {
-		if (count >= N) {
-			break;
-		}
-		uint64_t total = 0;
-		for (auto& order : orders) {
-			total += order.size;
-		}
-		std::cout << "price: " << price << "| total: " << total << "\n";
-		count++;
-	}
+  count = 0;
+  std::cout << "---ASKS---\n";
+  for (auto &[price, orders] : asks) {
+    if (count >= N) {
+      break;
+    }
+    uint64_t total = 0;
+    for (auto &order : orders) {
+      total += order.size;
+    }
+    std::cout << "price: " << price << "| total: " << total << "\n";
+    count++;
+  }
 }
 
-OrderBook::OrderBook(){
-	Trades.reserve(10000);
+OrderBook::OrderBook() { Trades.reserve(10000); }
+
+std::size_t OrderBook::bid_levels() const { return bids.size(); }
+
+std::size_t OrderBook::ask_levels() const { return asks.size(); }
+
+std::size_t OrderBook::trade_count() const { return Trades.size(); }
+
+uint64_t OrderBook::id_getter() const { return Trades.back().resting_id; }
+
+uint64_t OrderBook::price_getter(uint64_t id) {
+  Order *found = id_searcher(id);
+  if (found == nullptr) {
+    std::cerr << "id searcher returned null\n";
+    return 0;
+  }
+
+  return found->price;
 }
 
-std::size_t OrderBook::bid_levels () const{
-	return bids.size();
+Order *OrderBook::id_searcher(uint64_t id) {
+  for (auto &[price, orders] : asks) {
+    for (auto it = orders.begin(); it != orders.end(); ++it) {
+      if (it->id == id) {
+        return &*it;
+      }
+    }
+  }
+
+  for (auto &[price, orders] : bids) {
+    for (auto it = orders.begin(); it != orders.end(); ++it) {
+      if (it->id == id) {
+        return &*it;
+      }
+    }
+  }
+  return nullptr;
 }
 
-std::size_t OrderBook::ask_levels () const{
-	return asks.size();
-}
+uint64_t OrderBook::size_getter(uint64_t id) {
+  Order *found = id_searcher(id);
+  if (found == nullptr) {
+    std::cerr << "id searcher returned null\n";
+    return 0;
+  }
 
-std::size_t OrderBook::trade_count () const {
-	return Trades.size();
-}
-
-uint64_t OrderBook::id_getter () const {
-	return Trades.back().resting_id;
-}
-
-uint64_t OrderBook::price_getter(uint64_t id){
-	Order* found = id_searcher(id);
-	if (found == nullptr) {
-		std::cerr << "id searcher returned null\n";
-		return 0;
-	}
-
-	return found->price;
-}
-
-Order* OrderBook::id_searcher(uint64_t id) {
-	for (auto& [price, orders] : asks) {
-		for (auto it = orders.begin(); it != orders.end(); ++it) {
-			if (it->id == id) {
-				return &*it;
-			}
-		}
-	}
-
-	for (auto& [price, orders] : bids) {
-		for (auto it = orders.begin(); it != orders.end(); ++it) {
-			if (it->id == id) {
-				return &*it;
-			}
-		}
-	}
-	return nullptr;
-}
-
-uint64_t OrderBook::size_getter (uint64_t id)  {
-	Order* found = id_searcher(id);
-	if (found == nullptr) {
-		std::cerr << "id searcher returned null\n";
-		return 0;
-	}
-
-	return found->size;
+  return found->size;
 }

@@ -2,33 +2,52 @@
 #include <grpcpp/grpcpp.h>
 #include <iostream>
 
-
 int main() {
-    auto channel = grpc::CreateChannel("localhost:9000", grpc::InsecureChannelCredentials());
-    auto stub = exchange::Exchange::NewStub(channel);
+  auto channel =
+      grpc::CreateChannel("localhost:9000", grpc::InsecureChannelCredentials());
+  auto stub = exchange::Exchange::NewStub(channel);
 
-    exchange::NewOrderRequest request;
+  exchange::NewOrderRequest request;
 
-    request.set_side(0);
-    request.set_price(100);
-    
-    exchange::OrderResponse response;
-    grpc::ClientContext context;
+  request.set_side(0);
+  request.set_order_type(0);
+  request.set_price(100);
+  request.set_size(10);
 
-    grpc::Status status = stub->SubmitOrder(&context, request, &response);
-    
-    if (status.ok()) {
-        std::cout << "id: " << response.assigned_id()
-            << "status: " << response.accepted()
-            << "filled size: " << response.filled_size() << "\n";
-    }
+  exchange::OrderResponse response;
+  grpc::ClientContext context;
 
-    else {
-        std::cout << status.error_message() << "\n";
-    }
+  grpc::Status status = stub->SubmitOrder(&context, request, &response);
 
+  if (status.ok()) {
+    std::cout << "id: " << response.assigned_id()
+              << "status: " << response.accepted()
+              << "filled size: " << response.filled_size() << "\n";
+  }
 
+  else {
+    std::cout << status.error_message() << "\n";
+  }
 
+  request.set_side(1);
+  request.set_order_type(0);
+  request.set_price(100);
+  request.set_size(6);
 
-    return 0;
+  exchange::OrderResponse response2;
+  grpc::ClientContext context2;
+
+  grpc::Status status2 = stub->SubmitOrder(&context2, request, &response2);
+
+  if (status2.ok()) {
+    std::cout << "id: " << response2.assigned_id()
+              << "status: " << response2.accepted()
+              << "filled size: " << response2.filled_size() << "\n";
+  }
+
+  else {
+    std::cout << status.error_message() << "\n";
+  }
+
+  return 0;
 }

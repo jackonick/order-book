@@ -16,6 +16,7 @@ message OrderResponse {
   uint64 assigned_id = 1;  // server-assigned id
   bool accepted = 2;
   uint64 filled_size = 3;
+  uint32 reason = 4;
 }
 
 // ---- the service (replace your socket code) ----

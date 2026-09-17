@@ -37,6 +37,36 @@
 },
 {
   "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DABSL_CONSUME_DLL -DPROTOBUF_USE_DLLS -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd\" -isystem C:/vcpkg/installed/x64-windows/include -std=gnu++17 -o CMakeFiles\\exchange_proto.dir\\exchange.pb.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\exchange.pb.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/exchange.pb.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/exchange_proto.dir/exchange.pb.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DABSL_CONSUME_DLL -DPROTOBUF_USE_DLLS -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd\" -isystem C:/vcpkg/installed/x64-windows/include -std=gnu++17 -o CMakeFiles\\exchange_proto.dir\\exchange.grpc.pb.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\exchange.grpc.pb.cc\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/exchange.grpc.pb.cc",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/exchange_proto.dir/exchange.grpc.pb.cc.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DABSL_CONSUME_DLL -DPROTOBUF_USE_DLLS -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd\" -isystem C:/vcpkg/installed/x64-windows/include -std=gnu++17 -o CMakeFiles\\server.dir\\server.cpp.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\server.cpp\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/server.cpp",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/server.dir/server.cpp.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DABSL_CONSUME_DLL -DPROTOBUF_USE_DLLS -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd\" -isystem C:/vcpkg/installed/x64-windows/include -std=gnu++17 -o CMakeFiles\\server.dir\\order_book.cpp.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\order_book.cpp\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/order_book.cpp",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/server.dir/order_book.cpp.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe -DABSL_CONSUME_DLL -DPROTOBUF_USE_DLLS -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd\" -isystem C:/vcpkg/installed/x64-windows/include -std=gnu++17 -o CMakeFiles\\client.dir\\client.cpp.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\client.cpp\"",
+  "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/client.cpp",
+  "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/CMakeFiles/client.dir/client.cpp.obj"
+},
+{
+  "directory": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd",
   "command": "C:\\msys64\\mingw64\\bin\\c++.exe -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googlemock/include\" -I\"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googlemock\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest/include\" -isystem \"C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googletest\" -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=0 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -o _deps\\googletest-build\\googlemock\\CMakeFiles\\gmock.dir\\src\\gmock-all.cc.obj -c \"C:\\Users\\jackl\\Desktop\\projects\\Order Book V1\\order-book-v1\\src\\build-clangd\\_deps\\googletest-src\\googlemock\\src\\gmock-all.cc\"",
   "file": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-src/googlemock/src/gmock-all.cc",
   "output": "C:/Users/jackl/Desktop/projects/Order Book V1/order-book-v1/src/build-clangd/_deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.obj"
