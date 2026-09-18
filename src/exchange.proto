@@ -19,7 +19,27 @@ message OrderResponse {
   uint32 reason = 4;
 }
 
+message NewCancelRequest {
+  uint64 id = 1;
+}
+
+message CancelResponse {
+  uint32 reason = 1;
+}
+
+message NewModifyOrder {
+  uint64 id = 1;
+  optional uint64 price = 2;
+  optional uint64 size = 3;
+}
+
+message ModifyOrderResponse {
+  uint32 reason = 1;
+}
+
 // ---- the service (replace your socket code) ----
 service Exchange {
   rpc SubmitOrder(NewOrderRequest) returns (OrderResponse);
+  rpc SubmitCancel(NewCancelRequest) returns (CancelResponse);
+  rpc SubmitModify(NewModifyOrder) returns (ModifyResponse);
 }

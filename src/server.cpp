@@ -37,10 +37,42 @@ class serverclass final : public exchange::Exchange::Service {
 
     Outcome outcome = book.add_order(o);
 
-    response->set_assigned_id(counter);
+    response->set_assigned_id(outcome.assigned_id);
     response->set_accepted(outcome.reason == Reason::ACCEPTED);
     response->set_reason(static_cast<uint32_t>(outcome.reason));
     response->set_filled_size(outcome.quantity_filled);
+
+    return grpc::Status::OK;
+  }
+
+  grpc::Status SubmitCancel(grpc::ServerContext *context,
+                            const exchange::NewCancelRequest *request,
+                            exchange::CancelResponse *response) override {
+    std::lock_guard<std::mutex> lock(mtx);
+
+    Outcome2 outcome = book.cancel_id(request->id());
+
+    response->set_reason(static_cast<uint32_t>(outcome.reason));
+
+    return grpc::Status::OK;
+  }
+
+  grpc::Status SubmitModify(grpc::ServerContext *context,
+                            const exchange::NewModifyOrder *request,
+                            exchange::ModifyResponse *response) override {
+
+    std::lock_guard<std::mutex> lock(mtx);
+
+    Outcome2 outcome;
+    if (request->has_price()) {
+      outcome = book.modify_price(request->id(), request->price());
+    }
+
+    if (request->has_size()) {
+      outcome = book.modify_size(request->id(), request->size());
+    }
+
+    response->set_reason(static_cast<uint32_t>(outcome.reason));
 
     return grpc::Status::OK;
   }

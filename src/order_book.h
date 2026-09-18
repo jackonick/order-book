@@ -16,10 +16,10 @@ enum class Type {
   iceberg
 };
 
-enum class Reason { 
-  FOK_NOT_FILLED, 
-  IOC_NOT_FILLED, 
-  ACCEPTED, 
+enum class Reason {
+  FOK_NOT_FILLED,
+  IOC_NOT_FILLED,
+  ACCEPTED,
   BOC_CANCELLED,
   MODIFY_FAILED,
   MODIFY_ACCEPTED,
