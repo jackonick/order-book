@@ -24,7 +24,8 @@ enum class Reason {
   MODIFY_FAILED,
   MODIFY_ACCEPTED,
   CANCEL_FAILED,
-  CANCEL_ACCEPTED
+  CANCEL_ACCEPTED,
+  NOTHING_TO_MODIFY
 };
 
 struct Outcome {

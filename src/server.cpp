@@ -63,16 +63,29 @@ class serverclass final : public exchange::Exchange::Service {
 
     std::lock_guard<std::mutex> lock(mtx);
 
+    if (!request->has_price() && !request->has_size()) {
+      response->set_reason(static_cast<uint32_t>(Reason::NOTHING_TO_MODIFY));
+      response->set_accepted(false);
+      response->set_id(request->id());
+      return grpc::Status::OK;
+    }
+
     Outcome2 outcome;
+    outcome.reason = Reason::MODIFY_ACCEPTED;
+    outcome.assigned_id = request->id();
+
     if (request->has_price()) {
       outcome = book.modify_price(request->id(), request->price());
     }
 
-    if (request->has_size()) {
-      outcome = book.modify_size(request->id(), request->size());
+    if (request->has_size() && outcome.reason == Reason::MODIFY_ACCEPTED) {
+      outcome = book.modify_order(request->id(), request->size());
     }
 
     response->set_reason(static_cast<uint32_t>(outcome.reason));
+    response->set_accepted(outcome.reason == Reason::MODIFY_ACCEPTED ||
+                           outcome.reason == Reason::CANCEL_ACCEPTED);
+    response->set_id(outcome.assigned_id);
 
     return grpc::Status::OK;
   }

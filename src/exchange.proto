@@ -33,8 +33,10 @@ message NewModifyOrder {
   optional uint64 size = 3;
 }
 
-message ModifyOrderResponse {
+message ModifyResponse {
   uint32 reason = 1;
+  bool accepted = 2;
+  uint64 id = 3;
 }
 
 // ---- the service (replace your socket code) ----
