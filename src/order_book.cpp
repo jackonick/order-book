@@ -1,10 +1,8 @@
 #include "order_book.h"
 #include <algorithm>
-#include <filesystem>
+#include <chrono>
 #include <fstream>
 #include <iostream>
-#include <limits>
-#include <optional>
 #include <vector>
 
 bool OrderBook::canFill(Order incoming, bool is_buy) { // true means buy
@@ -78,16 +76,40 @@ Outcome OrderBook::add_order(Order incoming) {
       t1.incoming_id = incoming.id;
       Trades.push_back(t1);
 
+      eventTrade e;
+      e.trade_price = resting.price;
+      e.trade_size = trade_size;
+      e.resting_id = resting.id;
+      e.incoming_id = incoming.id;
+      e.seq_num = seq_num++;
+      events.push_back(e);
+
       if (resting.size == 0) {
         if (resting.type == Type::iceberg && resting.reserve > 0) {
           Order refill = resting;
           uint64_t slice = std::min(refill.display_size, refill.reserve);
 
+          auto now = std::chrono::steady_clock::now();
+          uint64_t ts = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                            now.time_since_epoch())
+                            .count();
+
           refill.size = slice;
           refill.reserve -= slice;
+          refill.timestamp = ts;
 
           asks.begin()->second.pop_front();
           asks[refill.price].push_back(refill);
+
+          eventAdd a;
+          a.side = refill.side;
+          a.price = refill.price;
+          a.timestamp = ts;
+          a.id = refill.id;
+          a.size = refill.size;
+          a.seq_num = seq_num++;
+          events.push_back(a);
+
         }
 
         else {
@@ -109,6 +131,15 @@ Outcome OrderBook::add_order(Order incoming) {
       if (incoming.size > 0) {
         bids[incoming.price].push_back(incoming);
         idIndex[incoming.id] = {incoming.price, incoming.side};
+
+        eventAdd a;
+        a.side = incoming.side;
+        a.price = incoming.price;
+        a.timestamp = incoming.timestamp;
+        a.id = incoming.id;
+        a.size = incoming.size;
+        a.seq_num = seq_num++;
+        events.push_back(a);
 
         outcome.quantity_rested = incoming.size;
       }
@@ -245,14 +276,14 @@ Outcome2 OrderBook::cancel_id(uint64_t id) {
 }
 
 Outcome2 OrderBook::modify_order(uint64_t id,
-                             uint64_t new_size) { // modify order size by id
+                                 uint64_t new_size) { // modify order size by id
   Outcome2 outcome;
   outcome.reason = Reason::MODIFY_ACCEPTED;
   outcome.assigned_id = id;
 
   if (new_size == 0) {
     cancel_id(id);
-    
+
     outcome.reason = Reason::CANCEL_ACCEPTED;
     return outcome;
   }
