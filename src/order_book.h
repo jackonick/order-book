@@ -3,6 +3,7 @@
 #include <deque>
 #include <map>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 enum class Side { BUY, SELL };
@@ -51,6 +52,47 @@ struct Order {
   uint64_t display_size;
 };
 
+struct eventAdd {
+  Side side;
+  uint64_t price;
+  uint64_t timestamp;
+  uint64_t id;
+  uint64_t size;
+  uint64_t seq_num;
+};
+
+struct eventCancel {
+  uint64_t price;
+  uint64_t id;
+  uint64_t seq_num;
+};
+
+struct eventModifyPrice {
+  uint64_t price;
+  uint64_t new_price;
+  uint64_t id;
+  uint64_t seq_num;
+};
+
+struct eventModifySize {
+  uint64_t size;
+  uint64_t new_size;
+  uint64_t price;
+  uint64_t id;
+  uint64_t seq_num;
+};
+
+struct eventTrade {
+  uint64_t trade_price;
+  uint64_t trade_size;
+  uint64_t resting_id;
+  uint64_t incoming_id;
+  uint64_t seq_num;
+};
+
+using Event = std::variant<eventAdd, eventCancel, eventModifyPrice,
+                           eventModifySize, eventTrade>;
+
 struct Trade {
   uint64_t resting_id;
   uint64_t resting_price;
@@ -89,4 +131,6 @@ private:
   std::map<uint64_t, std::deque<Order>> asks;
   std::vector<Trade> Trades;
   std::unordered_map<uint64_t, location> idIndex;
+  std::vector<Event> events;
+  uint64_t seq_num = 0;
 };
