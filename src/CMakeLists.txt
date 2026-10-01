@@ -37,10 +37,19 @@ target_link_libraries(benchmarks benchmark::benchmark)
 
 
 # --- gRPC / Protobuf ---
-find_package(protobuf CONFIG REQUIRED)
+# vcpkg ships a protobuf CMake config; Fedora's protobuf-devel does not, so
+# fall back to CMake's FindProtobuf module there.
+find_package(protobuf CONFIG QUIET)
+if(NOT protobuf_FOUND)
+  find_package(Protobuf REQUIRED)
+endif()
 find_package(gRPC CONFIG REQUIRED)
-find_package(Protobuf REQUIRED)
-set(CMAKE_PREFIX_PATH "/jackonick/share/cps/protobuf.cps")
+
+if(TARGET protobuf::protoc)
+  set(PROTOC_EXE protobuf::protoc)
+else()
+  set(PROTOC_EXE ${Protobuf_PROTOC_EXECUTABLE})
+endif()
 
 set(PROTO_FILE "${CMAKE_CURRENT_SOURCE_DIR}/exchange.proto")
 
@@ -51,7 +60,7 @@ set(GRPC_HDRS  "${CMAKE_CURRENT_BINARY_DIR}/exchange.grpc.pb.h")
 
 add_custom_command(
   OUTPUT ${PROTO_SRCS} ${PROTO_HDRS} ${GRPC_SRCS} ${GRPC_HDRS}
-  COMMAND protobuf::protoc
+  COMMAND ${PROTOC_EXE}
   ARGS --grpc_out "${CMAKE_CURRENT_BINARY_DIR}"
        --cpp_out  "${CMAKE_CURRENT_BINARY_DIR}"
        -I "${CMAKE_CURRENT_SOURCE_DIR}"
