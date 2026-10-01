@@ -27,9 +27,10 @@ static const char *reason_str(uint32_t code) {
   return "UNKNOWN";
 }
 
-int main() {
+int main(int argc, char **argv) {
+  std::string target = argc > 1 ? argv[1] : "localhost:9000";
   auto channel =
-      grpc::CreateChannel("localhost:9000", grpc::InsecureChannelCredentials());
+      grpc::CreateChannel(target, grpc::InsecureChannelCredentials());
   auto stub = exchange::Exchange::NewStub(channel);
 
   exchange::NewOrderRequest request;
