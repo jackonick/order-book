@@ -93,6 +93,28 @@ struct eventTrade {
 using Event = std::variant<eventAdd, eventCancel, eventModifyPrice,
                            eventModifySize, eventTrade>;
 
+// One resting order, as a subscriber needs to see it.
+struct SnapshotOrder {
+  uint64_t id;
+  Side side;
+  uint64_t price;
+  uint64_t size; // displayed size only: an iceberg's reserve stays hidden
+  uint64_t timestamp;
+};
+
+// The whole book at a point in time, so a subscriber joining late has somewhere to
+// start applying events from instead of replaying the entire history.
+struct Snapshot {
+  // Exclusive: every event with seq_num < as_of is already reflected in orders, and
+  // as_of is the next event the subscriber should apply. Exclusive (rather than "seq
+  // of the last event included") keeps an empty book at 0 instead of underflowing.
+  uint64_t as_of = 0;
+
+  // Book order: bids high to low, asks low to high, and within a price level the front
+  // of the queue first, so time priority survives the copy.
+  std::vector<SnapshotOrder> orders;
+};
+
 struct Trade {
   uint64_t resting_id;
   uint64_t resting_price;
@@ -120,6 +142,8 @@ public:
   std::size_t bid_levels() const;
   std::size_t ask_levels() const;
   std::size_t trade_count() const;
+  const std::vector<Event> &get_events() const;
+  Snapshot snapshot() const;
   uint64_t id_getter() const;
   uint64_t size_getter(uint64_t id);
   uint64_t price_getter(uint64_t id);

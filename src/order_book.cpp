@@ -185,16 +185,39 @@ Outcome OrderBook::add_order(Order incoming) {
       t1.incoming_id = incoming.id;
       Trades.push_back(t1);
 
+      eventTrade e;
+      e.trade_price = resting.price;
+      e.trade_size = trade_size;
+      e.resting_id = resting.id;
+      e.incoming_id = incoming.id;
+      e.seq_num = seq_num++;
+      events.push_back(e);
+
       if (resting.size == 0) {
         if (resting.type == Type::iceberg && resting.reserve > 0) {
           Order refill = resting;
           uint64_t slice = std::min(refill.display_size, refill.reserve);
 
+          auto now = std::chrono::steady_clock::now();
+          uint64_t ts = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                            now.time_since_epoch())
+                            .count();
+
           refill.size = slice;
           refill.reserve -= slice;
+          refill.timestamp = ts;
 
           bids.begin()->second.pop_front();
           bids[refill.price].push_back(refill);
+
+          eventAdd a;
+          a.side = refill.side;
+          a.price = refill.price;
+          a.timestamp = ts;
+          a.id = refill.id;
+          a.size = refill.size;
+          a.seq_num = seq_num++;
+          events.push_back(a);
         }
 
         else {
@@ -216,6 +239,15 @@ Outcome OrderBook::add_order(Order incoming) {
       if (incoming.size > 0) {
         asks[incoming.price].push_back(incoming);
         idIndex[incoming.id] = {incoming.price, incoming.side};
+
+        eventAdd a;
+        a.side = incoming.side;
+        a.price = incoming.price;
+        a.timestamp = incoming.timestamp;
+        a.id = incoming.id;
+        a.size = incoming.size;
+        a.seq_num = seq_num++;
+        events.push_back(a);
 
         outcome.quantity_rested = incoming.size;
       }
@@ -245,6 +277,12 @@ Outcome2 OrderBook::cancel_id(uint64_t id) {
         deque.erase(oit);
         idIndex.erase(id);
 
+        eventCancel c;
+        c.price = loc.price;
+        c.id = id;
+        c.seq_num = seq_num++;
+        events.push_back(c);
+
         outcome.reason = Reason::CANCEL_ACCEPTED;
         break;
       }
@@ -261,6 +299,12 @@ Outcome2 OrderBook::cancel_id(uint64_t id) {
       if (oit->id == id) {
         deque.erase(oit);
         idIndex.erase(id);
+
+        eventCancel c;
+        c.price = loc.price;
+        c.id = id;
+        c.seq_num = seq_num++;
+        events.push_back(c);
 
         outcome.reason = Reason::CANCEL_ACCEPTED;
         break;
@@ -296,6 +340,14 @@ Outcome2 OrderBook::modify_order(uint64_t id,
     return outcome;
   }
 
+  eventModifySize m;
+  m.size = found->size;
+  m.new_size = new_size;
+  m.price = found->price;
+  m.id = id;
+  m.seq_num = seq_num++;
+  events.push_back(m);
+
   found->size = new_size;
   return outcome;
 }
@@ -322,6 +374,14 @@ Outcome2 OrderBook::modify_price(uint64_t id, uint64_t new_price) {
   }
 
   saved = *found;
+
+  eventModifyPrice m;
+  m.price = saved.price;
+  m.new_price = new_price;
+  m.id = id;
+  m.seq_num = seq_num++;
+  events.push_back(m);
+
   cancel_id(id);
   saved.price = new_price;
   add_order(saved);
@@ -425,6 +485,33 @@ std::size_t OrderBook::bid_levels() const { return bids.size(); }
 std::size_t OrderBook::ask_levels() const { return asks.size(); }
 
 std::size_t OrderBook::trade_count() const { return Trades.size(); }
+
+const std::vector<Event> &OrderBook::get_events() const { return events; }
+
+Snapshot OrderBook::snapshot() const {
+  Snapshot snap;
+
+  // Read the counter and walk the book as one unit: if an event could be emitted
+  // partway through, the snapshot would be stamped with a seq it doesn't match.
+  snap.as_of = seq_num;
+  snap.orders.reserve(idIndex.size());
+
+  for (const auto &[price, orders] : bids) {
+    for (const auto &order : orders) {
+      snap.orders.push_back(
+          {order.id, order.side, price, order.size, order.timestamp});
+    }
+  }
+
+  for (const auto &[price, orders] : asks) {
+    for (const auto &order : orders) {
+      snap.orders.push_back(
+          {order.id, order.side, price, order.size, order.timestamp});
+    }
+  }
+
+  return snap;
+}
 
 uint64_t OrderBook::id_getter() const { return Trades.back().resting_id; }
 
