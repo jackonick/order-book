@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <sstream>
 
 bool OrderBook::canFill(Order incoming, bool is_buy) { // true means buy
   bool canFillNotKill = false;
@@ -92,7 +93,7 @@ Outcome OrderBook::add_order(Order incoming) {
           auto now = std::chrono::steady_clock::now();
           uint64_t ts = std::chrono::duration_cast<std::chrono::nanoseconds>(
                             now.time_since_epoch())
-                            .count();
+.count();
 
           refill.size = slice;
           refill.reserve -= slice;
@@ -389,24 +390,24 @@ Outcome2 OrderBook::modify_price(uint64_t id, uint64_t new_price) {
   return outcome;
 }
 
-void OrderBook::print() const {
-  std::cout << "---ASKS---\n";
+std::string OrderBook::dump() const {
+  std::ostringstream oss;
+  oss << "---ASKS---\n";
   for (const auto &[price, orders] : asks) {
-    std::cout << " Price= " << price << "\n";
+    oss << " Price= " << price << "\n";
     for (const auto &order : orders) {
-      std::cout << " Order_ID=" << order.id << " Order_Size=" << order.size
-                << "\n";
+      oss << " Order_ID=" << order.id << " Order_Size=" << order.size << "\n";
     }
   }
 
-  std::cout << "---BIDS---\n";
+  oss << "---BIDS---\n";
   for (const auto &[price, orders] : bids) {
-    std::cout << " Price= " << price << "\n";
+    oss << " Price= " << price << "\n";
     for (const auto &order : orders) {
-      std::cout << " Order_ID=" << order.id << " Order_Size=" << order.size
-                << "\n";
+      oss << " Order_id=" << order.id << " Order_Size=" << order.size << "\n";
     }
   }
+  return oss.str();
 }
 
 void OrderBook::printTrade() const {
@@ -476,6 +477,52 @@ void OrderBook::printDepth(int N) const {
     std::cout << "price: " << price << "| total: " << total << "\n";
     count++;
   }
+}
+
+void apply (const Event& e){
+  OrderBook book;
+  if (auto* a = std::get_if<eventAdd>(&e)){
+   if (a->side == Side::BUY) {
+    Order b;
+    b.side = a->side;
+    b.timestamp = a->timestmap;
+    b.price = a->price;
+    b.id = a->id;
+    b.size = a->size;
+    bids.push_back(b);
+    idIndex[b.id] = {b.price, b.side};
+   }
+
+   else {
+    Order s;
+    s.side = a->side;
+    s.timestmap = a->timestamp;
+    s.price = a->price;
+    s.id = a->id;
+    s.size = a->size;
+    asks.push_back(b);
+    idIndex[s.id] = {s.price, s.side};
+   }
+  }
+
+  else if (auto* t = std::get_if<eventTrade>(&e)){
+    Trade trade;
+    trade.resting_id = t.resting_id;
+    trade.resting_price = t.trade_price;
+    trade.trade_size = t.trade_size;
+    trade.incoming_id = t.incoming_id;
+    Trades.push_back(trade);
+  }
+  else if (auto* c = std::get_if<eventCancel>(&e)){
+   cancel_id(c->id); 
+  }
+  else if (auto* m = std::get_if<eventModifySize>(&e)){
+    modify_order(m->id, m->new_size); 
+  }
+  else if (auto* mp = std::get_if<eventModifyPrice>(&e)){
+    modify_price(mm->id, mm->new_price);
+  }
+  std::string rebuilt = dump();
 }
 
 OrderBook::OrderBook() { Trades.reserve(10000); }

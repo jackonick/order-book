@@ -1,5 +1,6 @@
 #include "order_book.h"
 #include <iostream>
+#include <string>
 
 int main()
 {
@@ -21,9 +22,6 @@ int main()
 	o2.timestamp = 1;
     book.add_order(o2);
 
-	std::cout << "\n--- After two SELLs ---\n";
-    book.print();
-
 	Order o3;
 	o3.id = 3;
 	o3.side = Side::BUY;
@@ -31,9 +29,6 @@ int main()
 	o3.size = 7;
 	o3.timestamp = 2;
     book.add_order(o3);
-
-	std::cout << "\n--- After BUY id=3 (should partial-fill id=1) ---\n";
-    book.print(); 
 
 	Order o4;
 	o4.id = 4;
@@ -43,8 +38,6 @@ int main()
 	o4.timestamp = 3;
     book.add_order(o4);
 
-	std::cout << "\n--- After BUY id=4 (rests on bids) ---\n";
-    book.print();
     
 	Order o5;
 	o5.id = 5;
@@ -59,5 +52,7 @@ int main()
     book.printTrade();
 	book.printBbo();
 
+
+  std::cout << book.dump();
 	return 0;
 }

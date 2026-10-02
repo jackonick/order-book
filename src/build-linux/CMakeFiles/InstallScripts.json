@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/jackonick/code/order-book-v1/src/build-linux/cmake_install.cmake",
+		"/home/jackonick/code/order-book-v1/src/build-linux/_deps/googletest-build/cmake_install.cmake",
+		"/home/jackonick/code/order-book-v1/src/build-linux/_deps/googletest-build/googlemock/cmake_install.cmake",
+		"/home/jackonick/code/order-book-v1/src/build-linux/_deps/googletest-build/googletest/cmake_install.cmake",
+		"/home/jackonick/code/order-book-v1/src/build-linux/_deps/benchmark-build/cmake_install.cmake",
+		"/home/jackonick/code/order-book-v1/src/build-linux/_deps/benchmark-build/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

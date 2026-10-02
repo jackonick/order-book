@@ -1,0 +1,2 @@
+/usr/bin/ar qc libexchange_proto.a CMakeFiles/exchange_proto.dir/exchange.pb.cc.o CMakeFiles/exchange_proto.dir/exchange.grpc.pb.cc.o
+/usr/bin/ranlib libexchange_proto.a
