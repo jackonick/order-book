@@ -94,6 +94,19 @@ struct eventTrade {
 using Event = std::variant<eventAdd, eventCancel, eventModifyPrice,
                            eventModifySize, eventTrade>;
 
+struct SnapshotOrder {
+  uint64_t id;
+  Side side;
+  uint64_t price;
+  uint64_t size;
+  uint64_t timestamp;
+};
+
+struct Snapshot {
+  uint64_t as_of = 0;
+  std::vector<SnapshotOrder> orders;
+};
+
 
 struct Trade {
   uint64_t resting_id;
@@ -124,6 +137,7 @@ public:
   std::size_t ask_levels() const;
   std::size_t trade_count() const;
   const std::vector<Event> &get_events() const;
+  Snapshot snapshot() const;
   uint64_t id_getter() const;
   uint64_t size_getter(uint64_t id);
   uint64_t price_getter(uint64_t id);

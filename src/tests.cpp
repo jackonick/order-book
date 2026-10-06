@@ -22,7 +22,6 @@ TEST(RestsWhenNoMatch, AddOrder){
 
 TEST(Matching, CrossingProducesTrade){
     OrderBook book;
-    book.print();
     Order o1;
     o1.id = 5;
 	o1.side = Side::BUY;
@@ -44,7 +43,6 @@ TEST(Matching, CrossingProducesTrade){
 
     EXPECT_EQ(book.trade_count(), 1);
 
-    book.print();
 }
 
 TEST(Crossing, SomeNameForTest){
@@ -283,4 +281,96 @@ TEST(iceBergOrder, IBG) {
     book.add_order(o4);
     EXPECT_EQ(book.ask_levels(), 0);
 
+}
+
+TEST(Replay, RebuildsIdenticalBook){
+    OrderBook live;
+
+    Order o1;
+    o1.side = Side::BUY;
+    o1.type = Type::GTC;
+    o1.price = 100;
+    o1.timestamp = 1;
+    o1.id = 1;
+    o1.size = 50;
+    o1.reserve = 0;
+    o1.display_size = 0;
+    live.add_order(o1);
+
+    Order o2;
+    o2.side = Side::BUY;
+    o2.type = Type::GTC;
+    o2.price = 100;
+    o2.timestamp = 2;
+    o2.id = 2;
+    o2.size = 30;
+    o2.reserve = 0;
+    o2.display_size = 0;
+    live.add_order(o2);
+
+    Order o3;
+    o3.side = Side::BUY;
+    o3.type = Type::GTC;
+    o3.price = 99;
+    o3.timestamp = 3;
+    o3.id = 3;
+    o3.size = 40;
+    o3.reserve = 0;
+    o3.display_size = 0;
+    live.add_order(o3);
+
+    Order o4;
+    o4.side = Side::SELL;
+    o4.type = Type::GTC;
+    o4.price = 101;
+    o4.timestamp = 4;
+    o4.id = 4;
+    o4.size = 25;
+    o4.reserve = 0;
+    o4.display_size = 0;
+    live.add_order(o4);
+
+    Order o5;
+    o5.side = Side::SELL;
+    o5.type = Type::iceberg;
+    o5.price = 102;
+    o5.timestamp = 5;
+    o5.id = 5;
+    o5.size = 10;
+    o5.reserve = 40;
+    o5.display_size = 10;
+    live.add_order(o5);
+
+    Order o6;
+    o6.side = Side::SELL;
+    o6.type = Type::GTC;
+    o6.price = 100;
+    o6.timestamp = 6;
+    o6.id = 6;
+    o6.size = 60;
+    o6.reserve = 0;
+    o6.display_size = 0;
+    live.add_order(o6);
+
+    Order o7;
+    o7.side = Side::BUY;
+    o7.type = Type::GTC;
+    o7.price = 102;
+    o7.timestamp = 7;
+    o7.id = 7;
+    o7.size = 10;
+    o7.reserve = 0;
+    o7.display_size = 0;
+    live.add_order(o7);
+
+    live.modify_order(3, 15);
+    live.modify_price(4, 103);
+    live.cancel_id(2);
+
+    OrderBook replayed;
+    for (const Event &e : live.get_events()) {
+        replayed.apply(e);
+    }
+
+    EXPECT_EQ(live.dump(), replayed.dump());
 }

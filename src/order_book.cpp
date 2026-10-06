@@ -479,50 +479,198 @@ void OrderBook::printDepth(int N) const {
   }
 }
 
-void apply (const Event& e){
-  OrderBook book;
-  if (auto* a = std::get_if<eventAdd>(&e)){
-   if (a->side == Side::BUY) {
-    Order b;
-    b.side = a->side;
-    b.timestamp = a->timestmap;
-    b.price = a->price;
-    b.id = a->id;
-    b.size = a->size;
-    bids.push_back(b);
-    idIndex[b.id] = {b.price, b.side};
-   }
+void OrderBook::apply(const Event &e) {
+  if (const auto *a = std::get_if<eventAdd>(&e)) {
+    Order o;
+    o.side = a->side;
+    o.type = Type::GTC;
+    o.price = a->price;
+    o.timestamp = a->timestamp;
+    o.id = a->id;
+    o.size = a->size;
+    o.reserve = 0;
+    o.display_size = 0;
 
-   else {
-    Order s;
-    s.side = a->side;
-    s.timestmap = a->timestamp;
-    s.price = a->price;
-    s.id = a->id;
-    s.size = a->size;
-    asks.push_back(b);
-    idIndex[s.id] = {s.price, s.side};
-   }
+    if (a->side == Side::BUY) {
+      bids[a->price].push_back(o);
+    }
+
+    else {
+      asks[a->price].push_back(o);
+    }
+
+    idIndex[a->id] = {a->price, a->side};
   }
 
-  else if (auto* t = std::get_if<eventTrade>(&e)){
-    Trade trade;
-    trade.resting_id = t.resting_id;
-    trade.resting_price = t.trade_price;
-    trade.trade_size = t.trade_size;
-    trade.incoming_id = t.incoming_id;
-    Trades.push_back(trade);
+  else if (const auto *t = std::get_if<eventTrade>(&e)) {
+    auto it = idIndex.find(t->resting_id);
+    if (it == idIndex.end()) {
+      return;
+    }
+
+    location loc = it->second;
+
+    if (loc.side == Side::BUY) {
+      auto &deque = bids[loc.price];
+      for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+        if (oit->id == t->resting_id) {
+          oit->size -= t->trade_size;
+
+          if (oit->size == 0) {
+            deque.erase(oit);
+            idIndex.erase(t->resting_id);
+          }
+
+          break;
+        }
+      }
+
+      if (bids[loc.price].empty()) {
+        bids.erase(loc.price);
+      }
+    }
+
+    else {
+      auto &deque = asks[loc.price];
+      for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+        if (oit->id == t->resting_id) {
+          oit->size -= t->trade_size;
+
+          if (oit->size == 0) {
+            deque.erase(oit);
+            idIndex.erase(t->resting_id);
+          }
+
+          break;
+        }
+      }
+
+      if (asks[loc.price].empty()) {
+        asks.erase(loc.price);
+      }
+    }
   }
-  else if (auto* c = std::get_if<eventCancel>(&e)){
-   cancel_id(c->id); 
+
+  else if (const auto *c = std::get_if<eventCancel>(&e)) {
+    auto it = idIndex.find(c->id);
+    if (it == idIndex.end()) {
+      return;
+    }
+
+    location loc = it->second;
+
+    if (loc.side == Side::BUY) {
+      auto &deque = bids[loc.price];
+      for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+        if (oit->id == c->id) {
+          deque.erase(oit);
+          idIndex.erase(c->id);
+          break;
+        }
+      }
+
+      if (bids[loc.price].empty()) {
+        bids.erase(loc.price);
+      }
+    }
+
+    else {
+      auto &deque = asks[loc.price];
+      for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+        if (oit->id == c->id) {
+          deque.erase(oit);
+          idIndex.erase(c->id);
+          break;
+        }
+      }
+
+      if (asks[loc.price].empty()) {
+        asks.erase(loc.price);
+      }
+    }
   }
-  else if (auto* m = std::get_if<eventModifySize>(&e)){
-    modify_order(m->id, m->new_size); 
+
+  else if (const auto *m = std::get_if<eventModifySize>(&e)) {
+    auto it = idIndex.find(m->id);
+    if (it == idIndex.end()) {
+      return;
+    }
+
+    location loc = it->second;
+
+    if (loc.side == Side::BUY) {
+      for (auto &order : bids[loc.price]) {
+        if (order.id == m->id) {
+          order.size = m->new_size;
+          break;
+        }
+      }
+    }
+
+    else {
+      for (auto &order : asks[loc.price]) {
+        if (order.id == m->id) {
+          order.size = m->new_size;
+          break;
+        }
+      }
+    }
   }
-  else if (auto* mp = std::get_if<eventModifyPrice>(&e)){
-    modify_price(mm->id, mm->new_price);
+
+  else if (const auto *mp = std::get_if<eventModifyPrice>(&e)) {
+    auto it = idIndex.find(mp->id);
+    if (it == idIndex.end()) {
+      return;
+    }
+
+    location loc = it->second;
+    Order moved;
+    bool found = false;
+
+    if (loc.side == Side::BUY) {
+      auto &deque = bids[loc.price];
+      for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+        if (oit->id == mp->id) {
+          moved = *oit;
+          deque.erase(oit);
+          found = true;
+          break;
+        }
+      }
+
+      if (bids[loc.price].empty()) {
+        bids.erase(loc.price);
+      }
+
+      if (found) {
+        moved.price = mp->new_price;
+        bids[mp->new_price].push_back(moved);
+        idIndex[mp->id] = {mp->new_price, Side::BUY};
+      }
+    }
+
+    else {
+      auto &deque = asks[loc.price];
+      for (auto oit = deque.begin(); oit != deque.end(); ++oit) {
+        if (oit->id == mp->id) {
+          moved = *oit;
+          deque.erase(oit);
+          found = true;
+          break;
+        }
+      }
+
+      if (asks[loc.price].empty()) {
+        asks.erase(loc.price);
+      }
+
+      if (found) {
+        moved.price = mp->new_price;
+        asks[mp->new_price].push_back(moved);
+        idIndex[mp->id] = {mp->new_price, Side::SELL};
+      }
+    }
   }
-  std::string rebuilt = dump();
 }
 
 OrderBook::OrderBook() { Trades.reserve(10000); }
@@ -538,8 +686,6 @@ const std::vector<Event> &OrderBook::get_events() const { return events; }
 Snapshot OrderBook::snapshot() const {
   Snapshot snap;
 
-  // Read the counter and walk the book as one unit: if an event could be emitted
-  // partway through, the snapshot would be stamped with a seq it doesn't match.
   snap.as_of = seq_num;
   snap.orders.reserve(idIndex.size());
 
