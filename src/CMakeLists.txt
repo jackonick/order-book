@@ -16,7 +16,7 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_executable(tests tests.cpp order_book.cpp)
+add_executable(tests tests.cpp phase3_tests.cpp order_book.cpp event_convert.cpp exchange_service.cpp)
 target_link_libraries(tests GTest::gtest_main)
 
 include(GoogleTest)
@@ -73,8 +73,10 @@ add_library(exchange_proto ${PROTO_SRCS} ${GRPC_SRCS})
 target_include_directories(exchange_proto PUBLIC "${CMAKE_CURRENT_BINARY_DIR}")
 target_link_libraries(exchange_proto PUBLIC gRPC::grpc++ protobuf::libprotobuf)
 
-add_executable(server server.cpp order_book.cpp)
+add_executable(server server.cpp order_book.cpp event_convert.cpp exchange_service.cpp)
 target_link_libraries(server exchange_proto)
 
-add_executable(client client.cpp)
+add_executable(client client.cpp order_book.cpp event_convert.cpp)
 target_link_libraries(client exchange_proto)
+
+target_link_libraries(tests exchange_proto)

@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "event_convert.h"
 #include "order_book.h"
 
 TEST(Suite, test){
@@ -373,4 +374,95 @@ TEST(Replay, RebuildsIdenticalBook){
     }
 
     EXPECT_EQ(live.dump(), replayed.dump());
+}
+
+TEST(EventRoundTrip, Add){
+    eventAdd before;
+    before.side = Side::SELL;
+    before.price = 10123;
+    before.timestamp = 987654321;
+    before.id = 42;
+    before.size = 75;
+    before.seq_num = 9;
+
+    Event back = from_proto(to_proto(Event{before}));
+    const eventAdd *after = std::get_if<eventAdd>(&back);
+
+    ASSERT_NE(after, nullptr);
+    EXPECT_EQ(after->side, before.side);
+    EXPECT_EQ(after->price, before.price);
+    EXPECT_EQ(after->timestamp, before.timestamp);
+    EXPECT_EQ(after->id, before.id);
+    EXPECT_EQ(after->size, before.size);
+    EXPECT_EQ(after->seq_num, before.seq_num);
+}
+
+TEST(EventRoundTrip, Cancel){
+    eventCancel before;
+    before.price = 9950;
+    before.id = 7;
+    before.seq_num = 13;
+
+    Event back = from_proto(to_proto(Event{before}));
+    const eventCancel *after = std::get_if<eventCancel>(&back);
+
+    ASSERT_NE(after, nullptr);
+    EXPECT_EQ(after->price, before.price);
+    EXPECT_EQ(after->id, before.id);
+    EXPECT_EQ(after->seq_num, before.seq_num);
+}
+
+TEST(EventRoundTrip, ModifyPrice){
+    eventModifyPrice before;
+    before.price = 10000;
+    before.new_price = 10050;
+    before.id = 21;
+    before.seq_num = 44;
+
+    Event back = from_proto(to_proto(Event{before}));
+    const eventModifyPrice *after = std::get_if<eventModifyPrice>(&back);
+
+    ASSERT_NE(after, nullptr);
+    EXPECT_EQ(after->price, before.price);
+    EXPECT_EQ(after->new_price, before.new_price);
+    EXPECT_EQ(after->id, before.id);
+    EXPECT_EQ(after->seq_num, before.seq_num);
+}
+
+TEST(EventRoundTrip, ModifySize){
+    eventModifySize before;
+    before.size = 500;
+    before.new_size = 125;
+    before.price = 10075;
+    before.id = 33;
+    before.seq_num = 58;
+
+    Event back = from_proto(to_proto(Event{before}));
+    const eventModifySize *after = std::get_if<eventModifySize>(&back);
+
+    ASSERT_NE(after, nullptr);
+    EXPECT_EQ(after->size, before.size);
+    EXPECT_EQ(after->new_size, before.new_size);
+    EXPECT_EQ(after->price, before.price);
+    EXPECT_EQ(after->id, before.id);
+    EXPECT_EQ(after->seq_num, before.seq_num);
+}
+
+TEST(EventRoundTrip, Trade){
+    eventTrade before;
+    before.trade_price = 10100;
+    before.trade_size = 250;
+    before.resting_id = 4;
+    before.incoming_id = 91;
+    before.seq_num = 77;
+
+    Event back = from_proto(to_proto(Event{before}));
+    const eventTrade *after = std::get_if<eventTrade>(&back);
+
+    ASSERT_NE(after, nullptr);
+    EXPECT_EQ(after->trade_price, before.trade_price);
+    EXPECT_EQ(after->trade_size, before.trade_size);
+    EXPECT_EQ(after->resting_id, before.resting_id);
+    EXPECT_EQ(after->incoming_id, before.incoming_id);
+    EXPECT_EQ(after->seq_num, before.seq_num);
 }

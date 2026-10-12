@@ -1,7 +1,9 @@
+#include "event_convert.h"
 #include "exchange.grpc.pb.h"
 #include "order_book.h"
 #include <grpcpp/grpcpp.h>
 #include <iostream>
+#include <memory>
 
 static const char *reason_str(uint32_t code) {
   switch (static_cast<Reason>(code)) {
@@ -27,11 +29,63 @@ static const char *reason_str(uint32_t code) {
   return "UNKNOWN";
 }
 
+static int run_subscribe(exchange::Exchange::Stub &stub) {
+  exchange::SubscribeRequest request;
+  request.set_depth(exchange::SubscribeRequest::DEPTH_L3);
+
+  grpc::ClientContext context;
+  std::unique_ptr<grpc::ClientReader<exchange::MarketDataEvent>> reader(
+      stub.Subscribe(&context, request));
+
+  OrderBook book;
+  exchange::MarketDataEvent msg;
+  uint64_t as_of = 0;
+  uint64_t snapshot_orders = 0;
+  bool first_delta = true;
+
+  while (reader->Read(&msg)) {
+    if (msg.snapshot()) {
+      as_of = msg.seq();
+
+      if (msg.event_case() == exchange::MarketDataEvent::EVENT_NOT_SET) {
+        continue;
+      }
+
+      book.apply(from_proto(msg));
+      snapshot_orders++;
+      continue;
+    }
+
+    if (first_delta) {
+      std::cout << "snapshot: " << snapshot_orders << " orders as of seq "
+                << as_of << ", first delta seq " << msg.seq() << "\n";
+      first_delta = false;
+    }
+
+    book.apply(from_proto(msg));
+    std::cout << "seq " << msg.seq() << "\n";
+  }
+
+  grpc::Status status = reader->Finish();
+  std::cout << book.dump();
+
+  if (!status.ok()) {
+    std::cout << status.error_message() << "\n";
+    return 1;
+  }
+
+  return 0;
+}
+
 int main(int argc, char **argv) {
   std::string target = argc > 1 ? argv[1] : "localhost:9000";
   auto channel =
       grpc::CreateChannel(target, grpc::InsecureChannelCredentials());
   auto stub = exchange::Exchange::NewStub(channel);
+
+  if (argc > 2 && std::string(argv[2]) == "subscribe") {
+    return run_subscribe(*stub);
+  }
 
   exchange::NewOrderRequest request;
 

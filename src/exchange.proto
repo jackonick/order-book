@@ -39,9 +39,68 @@ message ModifyResponse {
   uint64 id = 3;
 }
 
+enum Side {
+  SIDE_BUY = 0;
+  SIDE_SELL = 1;
+}
+
+message EventAdd {
+  Side side = 1;
+  uint64 price = 2;
+  uint64 timestamp = 3;
+  uint64 id = 4;
+  uint64 size = 5;
+}
+
+message EventCancel {
+  uint64 price = 1;
+  uint64 id = 2;
+}
+
+message EventModifyPrice {
+  uint64 price = 1;
+  uint64 new_price = 2;
+  uint64 id = 3;
+}
+
+message EventModifySize {
+  uint64 size = 1;
+  uint64 new_size = 2;
+  uint64 price = 3;
+  uint64 id = 4;
+}
+
+message EventTrade {
+  uint64 trade_price = 1;
+  uint64 trade_size = 2;
+  uint64 resting_id = 3;
+  uint64 incoming_id = 4;
+}
+
+message MarketDataEvent {
+  uint64 seq = 1;
+  bool snapshot = 7;
+  oneof event {
+    EventAdd add = 2;
+    EventCancel cancel = 3;
+    EventModifyPrice modify_price = 4;
+    EventModifySize modify_size = 5;
+    EventTrade trade = 6;
+  }
+}
+
+message SubscribeRequest {
+  enum Depth {
+    DEPTH_L3 = 0;
+    DEPTH_L2 = 1;
+  }
+  Depth depth = 1;
+}
+
 // ---- the service (replace your socket code) ----
 service Exchange {
   rpc SubmitOrder(NewOrderRequest) returns (OrderResponse);
   rpc SubmitCancel(NewCancelRequest) returns (CancelResponse);
   rpc SubmitModify(NewModifyOrder) returns (ModifyResponse);
+  rpc Subscribe(SubscribeRequest) returns (stream MarketDataEvent);
 }
