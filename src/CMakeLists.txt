@@ -80,3 +80,6 @@ add_executable(client client.cpp order_book.cpp event_convert.cpp)
 target_link_libraries(client exchange_proto)
 
 target_link_libraries(tests exchange_proto)
+find_package(unofficial-mysql-connector-cpp CONFIG REQUIRED)
+add_executable(dbtest dbtest.cpp)
+target_link_libraries(dbtest unofficial::mysql-connector-cpp::connector)
