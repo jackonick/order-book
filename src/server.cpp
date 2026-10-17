@@ -5,6 +5,8 @@
 #include <string>
 
 int main() {
+  std::cout.setf(std::ios::unitbuf);
+
   std::string server_address{"0.0.0.0:9000"};
 
   ExchangeService service;
@@ -13,6 +15,13 @@ int main() {
   builder.RegisterService(&service);
 
   std::unique_ptr<grpc::Server> server = builder.BuildAndStart();
+
+  if (!server) {
+    std::cerr << "failed to bind " << server_address
+              << " (is another server already running?)\n";
+    return 1;
+  }
+
   std::cout << "listening on " << server_address << "\n";
   server->Wait();
 

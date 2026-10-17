@@ -30,6 +30,8 @@ static const char *reason_str(uint32_t code) {
 }
 
 static int run_subscribe(exchange::Exchange::Stub &stub) {
+  std::cout.setf(std::ios::unitbuf);
+
   exchange::SubscribeRequest request;
   request.set_depth(exchange::SubscribeRequest::DEPTH_L3);
 
@@ -48,22 +50,27 @@ static int run_subscribe(exchange::Exchange::Stub &stub) {
       as_of = msg.seq();
 
       if (msg.event_case() == exchange::MarketDataEvent::EVENT_NOT_SET) {
+        std::cout << "connected, snapshot as of seq " << as_of << "\n";
         continue;
       }
 
       book.apply(from_proto(msg));
       snapshot_orders++;
+      std::cout << "snapshot order id " << msg.add().id() << " side "
+                << (msg.add().side() == exchange::SIDE_BUY ? "BUY" : "SELL")
+                << " price " << msg.add().price() << " size "
+                << msg.add().size() << "\n";
       continue;
     }
 
     if (first_delta) {
-      std::cout << "snapshot: " << snapshot_orders << " orders as of seq "
-                << as_of << ", first delta seq " << msg.seq() << "\n";
+      std::cout << "snapshot complete: " << snapshot_orders
+                << " resting orders, waiting for events\n";
       first_delta = false;
     }
 
     book.apply(from_proto(msg));
-    std::cout << "seq " << msg.seq() << "\n";
+    std::cout << "event seq " << msg.seq() << "\n";
   }
 
   grpc::Status status = reader->Finish();
@@ -78,6 +85,8 @@ static int run_subscribe(exchange::Exchange::Stub &stub) {
 }
 
 int main(int argc, char **argv) {
+  std::cout.setf(std::ios::unitbuf);
+
   std::string target = argc > 1 ? argv[1] : "localhost:9000";
   auto channel =
       grpc::CreateChannel(target, grpc::InsecureChannelCredentials());
